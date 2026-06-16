@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Quicksand:wght@500;600;700&family=Comic+Neue:wght@400;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    @keyframes bob { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-9px); } }
+    @keyframes floaty { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-13px); } }
+    @keyframes sway { 0%,100%{ transform: rotate(-3deg); } 50%{ transform: rotate(3deg); } }
+    @keyframes pop { 0%{ transform: scale(.5); opacity: 0; } 60%{ transform: scale(1.1); } 100%{ transform: scale(1); opacity: 1; } }
+    @keyframes fadeUp { 0%{ opacity: 0; transform: translateY(14px); } 100%{ opacity: 1; transform: translateY(0); } }
+    @keyframes fall { 0%{ transform: translateY(-30px) rotate(0deg); opacity: 1; } 100%{ transform: translateY(620px) rotate(420deg); opacity: 0; } }
+    @keyframes pulsering { 0%{ transform: scale(.85); opacity: .55; } 100%{ transform: scale(1.7); opacity: 0; } }
+    @keyframes shake { 0%,100%{ transform: translateX(0); } 20%{ transform: translateX(-7px); } 40%{ transform: translateX(7px); } 60%{ transform: translateX(-5px); } 80%{ transform: translateX(5px); } }
+    @keyframes twinkle { 0%,100%{ transform: scale(1) rotate(0deg); } 50%{ transform: scale(1.18) rotate(8deg); } }
+  </style>
+</helmet>
+
+<div style="min-height:100vh;width:100%;display:flex;align-items:center;justify-content:center;background:#E7ECF2;padding:34px 20px;font-family:'Nunito',system-ui,sans-serif">
+  <div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+
+    <div style="position:relative;padding:24px;border-radius:54px;background:linear-gradient(160deg,#3a4150,#262b35);box-shadow:0 30px 70px rgba(30,40,60,0.35),inset 0 0 0 3px rgba(255,255,255,0.06)">
+      <div style="position:absolute;top:50%;left:11px;transform:translateY(-50%);width:7px;height:54px;border-radius:5px;background:rgba(255,255,255,0.08)"></div>
+      <div style="position:absolute;top:50%;right:11px;transform:translateY(-50%);width:7px;height:54px;border-radius:5px;background:rgba(255,255,255,0.08)"></div>
+      <div style="position:relative;width:1024px;height:768px;border-radius:32px;overflow:hidden;background:var(--bg,#cfeaf7);box-shadow:inset 0 0 0 4px rgba(0,0,0,0.25)">
+
+        <div style="{{ screenStyle }}">
+
+          <!-- ============ HOME / MAP ============ -->
+          <sc-if value="{{ isHome }}" hint-placeholder-val="{{ true }}">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column">
+
+              <!-- top bar -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 30px;gap:16px;z-index:4">
+                <div style="display:flex;align-items:center;gap:16px">
+                  <div style="position:relative;width:74px;height:74px;border-radius:50%;background:#fff;box-shadow:0 8px 18px rgba(50,80,110,0.18);display:flex;align-items:center;justify-content:center;border:4px solid var(--yellow,#FBE4A0)">
+                    <svg width="56" height="56" viewBox="0 0 64 64">
+                      <circle cx="32" cy="30" r="20" fill="#F6CBA0"></circle>
+                      <path d="M12 28 C 12 12 52 12 52 28 C 52 20 44 14 32 14 C 20 14 12 20 12 28 Z" fill="#6B4A2B"></path>
+                      <circle cx="25" cy="30" r="3" fill="#3b2f26"></circle>
+                      <circle cx="39" cy="30" r="3" fill="#3b2f26"></circle>
+                      <path d="M26 39 Q 32 44 38 39" stroke="#B5704A" stroke-width="2.6" fill="none" stroke-linecap="round"></path>
+                      <ellipse cx="22" cy="36" rx="3.5" ry="2.2" fill="#F4A9A0" opacity="0.7"></ellipse>
+                      <ellipse cx="42" cy="36" rx="3.5" ry="2.2" fill="#F4A9A0" opacity="0.7"></ellipse>
+                    </svg>
+                  </div>
+                  <div>
+                    <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:30px;font-weight:800;color:var(--ink,#38505e);line-height:1">{{ greeting }}</div>
+                    <div style="display:flex;align-items:center;gap:9px;margin-top:8px">
+                      <span style="font-size:14px;font-weight:800;color:var(--accent,#5cb8e0);text-transform:uppercase;letter-spacing:.5px">{{ levelLabel }}</span>
+                      <div style="width:150px;height:13px;border-radius:8px;background:rgba(255,255,255,0.7);overflow:hidden;box-shadow:inset 0 1px 2px rgba(0,0,0,0.08)">
+                        <div style="{{ progStyle }}"></div>
+                      </div>
+                      <span style="font-size:13px;font-weight:800;color:var(--ink,#38505e);opacity:.7">{{ starsLabel }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px">
+                  <div style="display:flex;background:rgba(255,255,255,0.7);border-radius:30px;padding:4px;box-shadow:0 4px 12px rgba(50,80,110,0.12)">
+                    <button onClick="{{ setEs }}" style="{{ esBtnStyle }}">ES</button>
+                    <button onClick="{{ setEn }}" style="{{ enBtnStyle }}">EN</button>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:8px;background:#fff;border-radius:30px;padding:9px 18px 9px 13px;box-shadow:0 8px 18px rgba(50,80,110,0.16)">
+                    <span style="display:inline-flex;animation:twinkle 2.4s ease-in-out infinite">
+                      <svg width="28" height="28" viewBox="0 0 24 24"><path d="M12 2.6l2.7 5.8 6.3.7-4.7 4.3 1.3 6.2L12 16.9 6.1 19.6l1.3-6.2L2.7 9.1l6.3-.7z" fill="#FBC13E" stroke="#E9A21F" stroke-width="1"></path></svg>
+                    </span>
+                    <span style="font-family:var(--head,'Baloo 2',sans-serif);font-size:24px;font-weight:800;color:var(--ink,#38505e)">{{ stars }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- adventure title -->
+              <div style="position:absolute;top:108px;left:50%;transform:translateX(-50%);z-index:3;text-align:center">
+                <div style="background:#fff;padding:8px 26px;border-radius:30px;box-shadow:0 8px 20px rgba(50,80,110,0.14);font-family:var(--head,'Baloo 2',sans-serif);font-size:22px;font-weight:800;color:var(--coralInk,#E08070)">{{ t_adventure }}</div>
+              </div>
+
+              <!-- map scenery -->
+              <div style="position:relative;flex:1;overflow:hidden">
+                <svg style="position:absolute;inset:0;width:100%;height:100%" viewBox="0 0 1024 600" preserveAspectRatio="xMidYMid slice">
+                  <path d="M0 300 Q 256 268 512 300 T 1024 300 L1024 600 L0 600 Z" fill="var(--bg2,#8FCFE9)" opacity="0.55"></path>
+                  <path d="M0 350 Q 256 320 512 350 T 1024 350 L1024 600 L0 600 Z" fill="var(--bg2,#8FCFE9)"></path>
+                  <g opacity="0.85">
+                    <circle cx="930" cy="80" r="44" fill="var(--yellow,#FBE4A0)"></circle>
+                    <g stroke="var(--yellow,#FBE4A0)" stroke-width="7" stroke-linecap="round">
+                      <line x1="930" y1="14" x2="930" y2="2"></line>
+                      <line x1="990" y1="80" x2="1010" y2="80"></line>
+                      <line x1="884" y1="34" x2="872" y2="22"></line>
+                      <line x1="976" y1="34" x2="988" y2="22"></line>
+                      <line x1="884" y1="126" x2="872" y2="138"></line>
+                    </g>
+                  </g>
+                  <g fill="#ffffff" opacity="0.9">
+                    <ellipse cx="180" cy="90" rx="46" ry="22"></ellipse>
+                    <ellipse cx="220" cy="78" rx="34" ry="20"></ellipse>
+                    <ellipse cx="610" cy="60" rx="40" ry="19"></ellipse>
+                    <ellipse cx="650" cy="72" rx="30" ry="16"></ellipse>
+                  </g>
+                  <path d="M408 432 C 478 422 496 332 600 314 C 660 304 690 286 728 262" stroke="#ffffff" stroke-width="11" stroke-linecap="round" stroke-dasharray="0.5 28" fill="none" opacity="0.95"></path>
+                  <g>
+                    <circle cx="470" cy="398" r="15" fill="#fff" stroke="var(--mint,#BCE8CB)" stroke-width="5"></circle>
+                    <path d="M463 398 l5 5 9 -10" stroke="var(--accent,#5cb8e0)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <circle cx="560" cy="345" r="15" fill="#fff" stroke="var(--mint,#BCE8CB)" stroke-width="5"></circle>
+                    <path d="M553 345 l5 5 9 -10" stroke="var(--accent,#5cb8e0)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <circle cx="648" cy="305" r="14" fill="#EFE3CF" stroke="#fff" stroke-width="4"></circle>
+                    <path d="M648 300 a4 4 0 0 1 4 4 v3 h-8 v-3 a4 4 0 0 1 4 -4z M644 307 h8 v6 h-8z" fill="#C9A06A"></path>
+                  </g>
+                  <g transform="translate(404 416)">
+                    <path d="M-26 0 Q 0 22 26 0 Z" fill="#E98C73"></path>
+                    <rect x="-2" y="-30" width="4" height="30" fill="#9C6B45"></rect>
+                    <path d="M2 -30 L2 -6 L26 -16 Z" fill="#fff"></path>
+                    <path d="M2 -30 L2 -6 L26 -16 Z" fill="var(--coral,#F7B3A8)" opacity="0.55"></path>
+                  </g>
+                </svg>
+
+                <!-- Number Island button -->
+                <button onClick="{{ goMath }}" style="position:absolute;left:64px;bottom:54px;width:300px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0;transition:transform .26s cubic-bezier(.2,.9,.3,1.3)" style-hover="position:absolute;left:64px;bottom:54px;width:300px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0;transform:translateY(-10px) scale(1.04)">
+                  <div style="position:relative;animation:floaty 4.5s ease-in-out infinite">
+                    <svg width="252" height="168" viewBox="0 0 240 168">
+                      <ellipse cx="120" cy="150" rx="112" ry="16" fill="#fff" opacity="0.35"></ellipse>
+                      <ellipse cx="120" cy="130" rx="98" ry="24" fill="#F3DCA6"></ellipse>
+                      <path d="M26 124 Q 120 90 214 124 Q 180 110 120 108 Q 60 110 26 124 Z" fill="var(--mint,#BCE8CB)"></path>
+                      <path d="M80 112 C 76 92 76 76 84 58" stroke="#A9743F" stroke-width="9" fill="none" stroke-linecap="round"></path>
+                      <g fill="#7FC98C">
+                        <ellipse cx="84" cy="52" rx="27" ry="10" transform="rotate(-16 84 52)"></ellipse>
+                        <ellipse cx="84" cy="52" rx="27" ry="10" transform="rotate(16 84 52)"></ellipse>
+                        <ellipse cx="84" cy="48" rx="10" ry="24"></ellipse>
+                        <ellipse cx="64" cy="56" rx="24" ry="9" transform="rotate(-46 64 56)"></ellipse>
+                        <ellipse cx="104" cy="56" rx="24" ry="9" transform="rotate(46 104 56)"></ellipse>
+                      </g>
+                      <circle cx="80" cy="50" r="4.5" fill="#C98A2E"></circle>
+                      <g>
+                        <circle cx="162" cy="74" r="36" fill="#fff" stroke="var(--yellow,#FBE4A0)" stroke-width="7"></circle>
+                        <text x="162" y="86" text-anchor="middle" font-family="var(--head,'Baloo 2',sans-serif)" font-size="30" font-weight="800" fill="var(--accent,#5cb8e0)">123</text>
+                      </g>
+                    </svg>
+                  </div>
+                  <div style="background:#fff;border-radius:24px;padding:13px 22px;box-shadow:0 12px 26px rgba(50,80,110,0.2);text-align:center;min-width:230px">
+                    <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:23px;font-weight:800;color:var(--ink,#38505e);line-height:1.05">{{ t_mathIsland }}</div>
+                    <div style="font-size:14px;font-weight:700;color:var(--ink,#38505e);opacity:.6;margin-top:2px">{{ t_mathSub }}</div>
+                    <div style="display:inline-flex;align-items:center;gap:7px;margin-top:10px;background:var(--accent,#5cb8e0);color:#fff;border-radius:20px;padding:7px 18px;font-family:var(--head,'Baloo 2',sans-serif);font-size:16px;font-weight:800;box-shadow:0 5px 0 rgba(0,0,0,0.12)">
+                      <svg width="14" height="14" viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z" fill="#fff"></path></svg>{{ t_play }}
+                    </div>
+                  </div>
+                </button>
+
+                <!-- Word Island button -->
+                <button onClick="{{ goReading }}" style="position:absolute;right:74px;top:36px;width:300px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0;transition:transform .26s cubic-bezier(.2,.9,.3,1.3)" style-hover="position:absolute;right:74px;top:36px;width:300px;border:none;background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:10px;padding:0;transform:translateY(-10px) scale(1.04)">
+                  <div style="position:relative;animation:floaty 4.5s ease-in-out infinite .8s">
+                    <svg width="252" height="168" viewBox="0 0 240 168">
+                      <ellipse cx="120" cy="150" rx="112" ry="16" fill="#fff" opacity="0.35"></ellipse>
+                      <ellipse cx="120" cy="130" rx="98" ry="24" fill="#F3DCA6"></ellipse>
+                      <path d="M26 124 Q 120 90 214 124 Q 180 110 120 108 Q 60 110 26 124 Z" fill="var(--mint,#BCE8CB)"></path>
+                      <rect x="78" y="78" width="9" height="36" rx="4" fill="#A9743F"></rect>
+                      <circle cx="82" cy="64" r="26" fill="#84C98C"></circle>
+                      <circle cx="64" cy="74" r="18" fill="#76BE82"></circle>
+                      <circle cx="100" cy="74" r="18" fill="#76BE82"></circle>
+                      <circle cx="72" cy="58" r="5" fill="var(--coral,#F7B3A8)"></circle>
+                      <circle cx="94" cy="60" r="5" fill="var(--coral,#F7B3A8)"></circle>
+                      <g transform="translate(150 46)">
+                        <path d="M0 8 Q 16 0 30 8 L30 50 Q 16 42 0 50 Z" fill="#fff" stroke="var(--coral,#F7B3A8)" stroke-width="3"></path>
+                        <path d="M60 8 Q 44 0 30 8 L30 50 Q 44 42 60 50 Z" fill="#fff" stroke="var(--coral,#F7B3A8)" stroke-width="3"></path>
+                        <text x="30" y="34" text-anchor="middle" font-family="var(--head,'Baloo 2',sans-serif)" font-size="20" font-weight="800" fill="var(--coralInk,#E08070)">ABC</text>
+                      </g>
+                    </svg>
+                  </div>
+                  <div style="background:#fff;border-radius:24px;padding:13px 22px;box-shadow:0 12px 26px rgba(50,80,110,0.2);text-align:center;min-width:230px">
+                    <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:23px;font-weight:800;color:var(--ink,#38505e);line-height:1.05">{{ t_wordIsland }}</div>
+                    <div style="font-size:14px;font-weight:700;color:var(--ink,#38505e);opacity:.6;margin-top:2px">{{ t_wordSub }}</div>
+                    <div style="display:inline-flex;align-items:center;gap:7px;margin-top:10px;background:var(--coralInk,#E08070);color:#fff;border-radius:20px;padding:7px 18px;font-family:var(--head,'Baloo 2',sans-serif);font-size:16px;font-weight:800;box-shadow:0 5px 0 rgba(0,0,0,0.12)">
+                      <svg width="14" height="14" viewBox="0 0 24 24"><path d="M7 5l12 7-12 7z" fill="#fff"></path></svg>{{ t_play }}
+                    </div>
+                  </div>
+                </button>
+              </div>
+            </div>
+          </sc-if>
+
+          <!-- ============ MATH ============ -->
+          <sc-if value="{{ isMath }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg,#cfeaf7)">
+              <!-- top bar -->
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 26px;z-index:5">
+                <button onClick="{{ goHome }}" style="display:flex;align-items:center;gap:8px;border:none;cursor:pointer;background:#fff;border-radius:24px;padding:11px 18px;box-shadow:0 6px 14px rgba(50,80,110,0.14);font-family:var(--head,'Baloo 2',sans-serif);font-weight:800;font-size:16px;color:var(--ink,#38505e)">
+                  <svg width="20" height="20" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5" stroke="var(--accent,#5cb8e0)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.5 10v9h13v-9" stroke="var(--accent,#5cb8e0)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  {{ t_map }}
+                </button>
+                <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:26px;font-weight:800;color:var(--ink,#38505e);white-space:nowrap">{{ t_mathTitle }}</div>
+                <div style="display:flex;align-items:center;gap:8px;background:#fff;border-radius:30px;padding:9px 18px 9px 13px;box-shadow:0 6px 14px rgba(50,80,110,0.14)">
+                  <svg width="26" height="26" viewBox="0 0 24 24"><path d="M12 2.6l2.7 5.8 6.3.7-4.7 4.3 1.3 6.2L12 16.9 6.1 19.6l1.3-6.2L2.7 9.1l6.3-.7z" fill="#FBC13E" stroke="#E9A21F" stroke-width="1"></path></svg>
+                  <span style="font-family:var(--head,'Baloo 2',sans-serif);font-size:22px;font-weight:800;color:var(--ink,#38505e)">{{ stars }}</span>
+                </div>
+              </div>
+
+              <!-- equation with apples -->
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:0 30px 10px">
+                <div style="display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap">
+                  <div style="background:#fff;border-radius:28px;padding:20px 22px 14px;box-shadow:0 14px 30px rgba(50,80,110,0.12);display:flex;flex-direction:column;align-items:center;gap:8px">
+                    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:200px">
+                      <sc-for list="{{ appleA }}" as="x" hint-placeholder-count="3">
+                        <span style="display:inline-flex">
+                          <svg width="48" height="50" viewBox="0 0 64 64"><ellipse cx="32" cy="59" rx="16" ry="3.5" fill="rgba(0,0,0,0.07)"></ellipse><path d="M32 21 C 24 13 12 17 12 31 C 12 45 22 56 32 56 C 42 56 52 45 52 31 C 52 17 40 13 32 21 Z" fill="#F1736B"></path><rect x="30" y="11" width="4.5" height="13" rx="2.2" fill="#8A5A3B"></rect><ellipse cx="41" cy="13" rx="9" ry="5" fill="#7FCB86" transform="rotate(-24 41 13)"></ellipse><ellipse cx="23" cy="31" rx="5" ry="8" fill="rgba(255,255,255,0.5)"></ellipse></svg>
+                        </span>
+                      </sc-for>
+                    </div>
+                    <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:40px;font-weight:800;color:var(--accent,#5cb8e0)">{{ probA }}</div>
+                  </div>
+
+                  <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:54px;font-weight:800;color:var(--ink,#38505e);opacity:.55">+</div>
+
+                  <div style="background:#fff;border-radius:28px;padding:20px 22px 14px;box-shadow:0 14px 30px rgba(50,80,110,0.12);display:flex;flex-direction:column;align-items:center;gap:8px">
+                    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:8px;max-width:200px">
+                      <sc-for list="{{ appleB }}" as="x" hint-placeholder-count="2">
+                        <span style="display:inline-flex">
+                          <svg width="48" height="50" viewBox="0 0 64 64"><ellipse cx="32" cy="59" rx="16" ry="3.5" fill="rgba(0,0,0,0.07)"></ellipse><path d="M32 21 C 24 13 12 17 12 31 C 12 45 22 56 32 56 C 42 56 52 45 52 31 C 52 17 40 13 32 21 Z" fill="#F1736B"></path><rect x="30" y="11" width="4.5" height="13" rx="2.2" fill="#8A5A3B"></rect><ellipse cx="41" cy="13" rx="9" ry="5" fill="#7FCB86" transform="rotate(-24 41 13)"></ellipse><ellipse cx="23" cy="31" rx="5" ry="8" fill="rgba(255,255,255,0.5)"></ellipse></svg>
+                        </span>
+                      </sc-for>
+                    </div>
+                    <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:40px;font-weight:800;color:var(--coralInk,#E08070)">{{ probB }}</div>
+                  </div>
+
+                  <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:54px;font-weight:800;color:var(--ink,#38505e);opacity:.55">=</div>
+
+                  <div style="{{ answerBoxStyle }}">{{ answerBoxText }}</div>
+                </div>
+
+                <!-- feedback line -->
+                <div style="height:34px;display:flex;align-items:center">
+                  <sc-if value="{{ showWrong }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;align-items:center;gap:8px;color:var(--coralInk,#E08070);font-weight:800;font-size:19px">
+                      <svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#F7B3A8"></circle><path d="M9 9l6 6M15 9l-6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round"></path></svg>
+                      {{ t_almost }}
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ showCorrect }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;align-items:center;gap:8px;color:#2FAE7A;font-weight:800;font-size:19px">
+                      <svg width="22" height="22" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#9FD9B8"></circle><path d="M8 12.5l2.5 2.5 5-5.5" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                      {{ t_great }}
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+
+              <!-- options -->
+              <div style="display:flex;justify-content:center;gap:22px;padding:0 30px 26px">
+                <sc-for list="{{ options }}" as="opt" hint-placeholder-count="3">
+                  <button onClick="{{ opt.onClick }}" style="{{ opt.style }}">
+                    <span>{{ opt.value }}</span>
+                    <sc-if value="{{ opt.showMark }}" hint-placeholder-val="{{ false }}">
+                      <span style="{{ opt.markStyle }}">{{ opt.mark }}</span>
+                    </sc-if>
+                  </button>
+                </sc-for>
+              </div>
+
+              <!-- help button -->
+              <button onClick="{{ openHelp }}" style="position:absolute;left:26px;bottom:26px;display:flex;align-items:center;gap:10px;border:none;cursor:pointer;background:var(--yellow,#FBE4A0);border-radius:30px;padding:9px 20px 9px 10px;box-shadow:0 8px 0 rgba(0,0,0,0.1);font-family:var(--head,'Baloo 2',sans-serif);font-weight:800;font-size:17px;color:var(--ink,#38505e)">
+                <span style="width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;animation:bob 2.6s ease-in-out infinite">
+                  <svg width="34" height="36" viewBox="0 0 120 130"><path d="M58 16 C 40 20 31 42 31 67 C 31 92 43 112 64 114 C 83 116 91 99 91 79 C 91 59 85 41 79 27 C 75 18 67 14 58 16 Z" fill="#F7CE3E" stroke="#E7B52E" stroke-width="3"></path><g stroke="#5A4632" stroke-width="3.4" fill="#fff"><circle cx="53" cy="62" r="12"></circle><circle cx="80" cy="62" r="12"></circle></g><circle cx="55" cy="63" r="4" fill="#41372B"></circle><circle cx="82" cy="63" r="4" fill="#41372B"></circle><path d="M57 82 Q 67 91 78 81" stroke="#5A4632" stroke-width="3.2" fill="none" stroke-linecap="round"></path></svg>
+                </span>
+                {{ t_help }}
+              </button>
+
+              <!-- celebrate overlay -->
+              <sc-if value="{{ celebrate }}" hint-placeholder-val="{{ false }}">
+                <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(40,60,75,0.28);z-index:20">
+                  <sc-for list="{{ confetti }}" as="c" hint-placeholder-count="0">
+                    <span style="{{ c.style }}"></span>
+                  </sc-for>
+                  <div style="background:#fff;border-radius:36px;padding:30px 44px;box-shadow:0 24px 60px rgba(30,50,70,0.3);display:flex;flex-direction:column;align-items:center;gap:14px">
+                    <svg width="120" height="130" viewBox="0 0 120 130" style="animation:bob 2.2s ease-in-out infinite"><ellipse cx="62" cy="122" rx="30" ry="6" fill="rgba(0,0,0,0.08)"></ellipse><path d="M58 16 C 40 20 31 42 31 67 C 31 92 43 112 64 114 C 83 116 91 99 91 79 C 91 59 85 41 79 27 C 75 18 67 14 58 16 Z" fill="#F7CE3E" stroke="#E7B52E" stroke-width="3"></path><path d="M48 32 C 41 46 40 70 48 90 C 53 102 60 106 66 104 C 56 98 51 84 50 67 C 49 51 51 40 56 32 C 53 30 50 30 48 32 Z" fill="#FBDD72" opacity="0.8"></path><g stroke="#5A4632" stroke-width="3.4" fill="#fff"><circle cx="53" cy="62" r="13"></circle><circle cx="80" cy="62" r="13"></circle></g><line x1="66" y1="62" x2="67" y2="62" stroke="#5A4632" stroke-width="3.4"></line><circle cx="55" cy="63" r="4.5" fill="#41372B"></circle><circle cx="82" cy="63" r="4.5" fill="#41372B"></circle><circle cx="56.5" cy="61.5" r="1.5" fill="#fff"></circle><circle cx="83.5" cy="61.5" r="1.5" fill="#fff"></circle><ellipse cx="44" cy="76" rx="6" ry="4" fill="#F6A6A0" opacity="0.7"></ellipse><ellipse cx="89" cy="76" rx="6" ry="4" fill="#F6A6A0" opacity="0.7"></ellipse><path d="M55 82 Q 67 93 79 82" stroke="#5A4632" stroke-width="3.4" fill="none" stroke-linecap="round"></path><g><rect x="44" y="6" width="40" height="9" rx="2" fill="#3B3550" transform="rotate(-8 64 10)"></rect><path d="M50 12 L64 7 L78 12 L64 17 Z" fill="#4A4366"></path><circle cx="80" cy="11" r="2.5" fill="#F7CE3E"></circle><path d="M80 11 L82 22" stroke="#F7CE3E" stroke-width="2"></path><circle cx="82" cy="23" r="2.5" fill="#F2B84B"></circle></g></svg>
+                    <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:30px;font-weight:800;color:var(--ink,#38505e)">{{ t_great }}</div>
+                    <div style="display:flex;gap:6px">
+                      <svg width="34" height="34" viewBox="0 0 24 24" style="animation:twinkle 1.4s ease-in-out infinite"><path d="M12 2.6l2.7 5.8 6.3.7-4.7 4.3 1.3 6.2L12 16.9 6.1 19.6l1.3-6.2L2.7 9.1l6.3-.7z" fill="#FBC13E" stroke="#E9A21F" stroke-width="1"></path></svg>
+                      <svg width="44" height="44" viewBox="0 0 24 24" style="animation:twinkle 1.4s ease-in-out infinite .2s"><path d="M12 2.6l2.7 5.8 6.3.7-4.7 4.3 1.3 6.2L12 16.9 6.1 19.6l1.3-6.2L2.7 9.1l6.3-.7z" fill="#FBC13E" stroke="#E9A21F" stroke-width="1"></path></svg>
+                      <svg width="34" height="34" viewBox="0 0 24 24" style="animation:twinkle 1.4s ease-in-out infinite .4s"><path d="M12 2.6l2.7 5.8 6.3.7-4.7 4.3 1.3 6.2L12 16.9 6.1 19.6l1.3-6.2L2.7 9.1l6.3-.7z" fill="#FBC13E" stroke="#E9A21F" stroke-width="1"></path></svg>
+                    </div>
+                    <button onClick="{{ nextProblem }}" style="display:inline-flex;align-items:center;gap:9px;border:none;cursor:pointer;background:var(--accent,#5cb8e0);color:#fff;border-radius:26px;padding:14px 30px;font-family:var(--head,'Baloo 2',sans-serif);font-size:20px;font-weight:800;box-shadow:0 7px 0 rgba(0,0,0,0.14);margin-top:4px">
+                      {{ t_next }}
+                      <svg width="22" height="22" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    </button>
+                  </div>
+                </div>
+              </sc-if>
+
+              <!-- help modal -->
+              <sc-if value="{{ showHelp }}" hint-placeholder-val="{{ false }}">
+                <div onClick="{{ closeHelp }}" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(40,60,75,0.28);z-index:25">
+                  <div style="background:#fff;border-radius:32px;padding:30px 36px;max-width:520px;box-shadow:0 24px 60px rgba(30,50,70,0.3);display:flex;gap:20px;align-items:flex-start">
+                    <svg width="92" height="100" viewBox="0 0 120 130" style="flex-shrink:0;animation:bob 2.4s ease-in-out infinite"><ellipse cx="62" cy="122" rx="30" ry="6" fill="rgba(0,0,0,0.08)"></ellipse><path d="M58 16 C 40 20 31 42 31 67 C 31 92 43 112 64 114 C 83 116 91 99 91 79 C 91 59 85 41 79 27 C 75 18 67 14 58 16 Z" fill="#F7CE3E" stroke="#E7B52E" stroke-width="3"></path><path d="M48 32 C 41 46 40 70 48 90 C 53 102 60 106 66 104 C 56 98 51 84 50 67 C 49 51 51 40 56 32 C 53 30 50 30 48 32 Z" fill="#FBDD72" opacity="0.8"></path><g stroke="#5A4632" stroke-width="3.4" fill="#fff"><circle cx="53" cy="62" r="13"></circle><circle cx="80" cy="62" r="13"></circle></g><line x1="66" y1="62" x2="67" y2="62" stroke="#5A4632" stroke-width="3.4"></line><circle cx="55" cy="63" r="4.5" fill="#41372B"></circle><circle cx="82" cy="63" r="4.5" fill="#41372B"></circle><circle cx="56.5" cy="61.5" r="1.5" fill="#fff"></circle><circle cx="83.5" cy="61.5" r="1.5" fill="#fff"></circle><ellipse cx="44" cy="76" rx="6" ry="4" fill="#F6A6A0" opacity="0.7"></ellipse><ellipse cx="89" cy="76" rx="6" ry="4" fill="#F6A6A0" opacity="0.7"></ellipse><path d="M55 82 Q 67 93 79 82" stroke="#5A4632" stroke-width="3.4" fill="none" stroke-linecap="round"></path><g><rect x="44" y="6" width="40" height="9" rx="2" fill="#3B3550" transform="rotate(-8 64 10)"></rect><path d="M50 12 L64 7 L78 12 L64 17 Z" fill="#4A4366"></path><circle cx="80" cy="11" r="2.5" fill="#F7CE3E"></circle><path d="M80 11 L82 22" stroke="#F7CE3E" stroke-width="2"></path><circle cx="82" cy="23" r="2.5" fill="#F2B84B"></circle></g></svg>
+                    <div>
+                      <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:21px;font-weight:800;color:var(--coralInk,#E08070)">{{ t_helpTitle }}</div>
+                      <div style="font-size:19px;font-weight:700;color:var(--ink,#38505e);line-height:1.45;margin-top:8px">{{ t_helpHint }}</div>
+                      <button onClick="{{ closeHelp }}" style="margin-top:18px;border:none;cursor:pointer;background:var(--mint,#BCE8CB);color:var(--ink,#38505e);border-radius:22px;padding:11px 26px;font-family:var(--head,'Baloo 2',sans-serif);font-size:17px;font-weight:800;box-shadow:0 5px 0 rgba(0,0,0,0.1)">{{ t_gotit }}</button>
+                    </div>
+                  </div>
+                </div>
+              </sc-if>
+            </div>
+          </sc-if>
+
+          <!-- ============ READING ============ -->
+          <sc-if value="{{ isReading }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg,#cfeaf7)">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 26px;z-index:5">
+                <button onClick="{{ goHome }}" style="display:flex;align-items:center;gap:8px;border:none;cursor:pointer;background:#fff;border-radius:24px;padding:11px 18px;box-shadow:0 6px 14px rgba(50,80,110,0.14);font-family:var(--head,'Baloo 2',sans-serif);font-weight:800;font-size:16px;color:var(--ink,#38505e)">
+                  <svg width="20" height="20" viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5" stroke="var(--coralInk,#E08070)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path><path d="M5.5 10v9h13v-9" stroke="var(--coralInk,#E08070)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  {{ t_map }}
+                </button>
+                <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:26px;font-weight:800;color:var(--ink,#38505e);white-space:nowrap">{{ t_readingTitle }}</div>
+                <div style="display:flex;align-items:center;gap:7px;font-family:var(--head,'Baloo 2',sans-serif);font-weight:800;font-size:18px;color:var(--ink,#38505e);background:#fff;border-radius:24px;padding:9px 18px;box-shadow:0 6px 14px rgba(50,80,110,0.14)">{{ pageLabel }}</div>
+              </div>
+
+              <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:0 40px 16px">
+                <!-- storybook illustration -->
+                <div style="background:#fff;border-radius:30px;padding:14px;box-shadow:0 18px 40px rgba(50,80,110,0.16);width:560px;max-width:100%">
+                  <div style="border-radius:20px;overflow:hidden;border:3px solid var(--bg,#cfeaf7)">
+                    <svg width="100%" viewBox="0 0 560 300" style="display:block">
+                      <rect width="560" height="300" fill="#DCF1FB"></rect>
+                      <circle cx="80" cy="64" r="34" fill="#FBD34B"></circle>
+                      <g stroke="#FBD34B" stroke-width="6" stroke-linecap="round"><line x1="80" y1="14" x2="80" y2="2"></line><line x1="128" y1="64" x2="142" y2="64"></line><line x1="44" y1="28" x2="35" y2="19"></line><line x1="116" y1="28" x2="125" y2="19"></line></g>
+                      <g fill="#fff" opacity="0.92"><ellipse cx="420" cy="58" rx="44" ry="20"></ellipse><ellipse cx="460" cy="48" rx="32" ry="17"></ellipse></g>
+                      <path d="M210 90 q14 -12 28 0" stroke="#8FB8C9" stroke-width="3" fill="none" stroke-linecap="round"></path>
+                      <path d="M250 78 q12 -10 24 0" stroke="#8FB8C9" stroke-width="3" fill="none" stroke-linecap="round"></path>
+                      <path d="M0 196 Q 140 176 280 196 T 560 196 L560 300 L0 300 Z" fill="#9AD7EC" opacity="0.6"></path>
+                      <path d="M0 224 Q 140 204 280 224 T 560 224 L560 300 L0 300 Z" fill="#79C7E4"></path>
+                      <ellipse cx="300" cy="214" rx="118" ry="22" fill="#F3DCA6"></ellipse>
+                      <path d="M210 206 Q 300 180 392 206 Q 350 196 300 195 Q 250 196 210 206 Z" fill="#9BD9A8"></path>
+                      <path d="M300 196 C 296 176 296 160 304 142" stroke="#A9743F" stroke-width="9" fill="none" stroke-linecap="round"></path>
+                      <g fill="#7FC98C"><ellipse cx="304" cy="136" rx="30" ry="11" transform="rotate(-16 304 136)"></ellipse><ellipse cx="304" cy="136" rx="30" ry="11" transform="rotate(16 304 136)"></ellipse><ellipse cx="304" cy="132" rx="11" ry="27"></ellipse></g>
+                      <g transform="translate(150 224)"><path d="M-34 0 Q 0 26 34 0 Z" fill="#E98C73"></path><rect x="-2" y="-40" width="5" height="40" fill="#9C6B45"></rect><path d="M3 -40 L3 -8 L34 -22 Z" fill="#fff"></path><path d="M3 -40 L3 -8 L34 -22 Z" fill="var(--coral,#F7B3A8)" opacity="0.6"></path></g>
+                      <g transform="translate(0 12)"><path d="M430 250 q10 8 20 0" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"></path></g>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- sentence -->
+                <div style="background:#fff;border-radius:24px;padding:20px 30px;box-shadow:0 10px 26px rgba(50,80,110,0.12);max-width:620px;text-align:center">
+                  <div style="font-family:var(--head,'Baloo 2',sans-serif);font-size:30px;font-weight:700;color:var(--ink,#38505e);line-height:1.35;text-wrap:balance">{{ sentence }}</div>
+                </div>
+
+                <!-- audio controls -->
+                <div style="display:flex;align-items:center;gap:18px">
+                  <button onClick="{{ speakSentence }}" style="{{ listenBtnStyle }}">
+                    <svg width="26" height="26" viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9z" fill="#fff"></path><path d="M16 8.5a4 4 0 0 1 0 7M18.5 6a7 7 0 0 1 0 12" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"></path></svg>
+                    {{ listenLabel }}
+                  </button>
+                  <button onClick="{{ recordVoice }}" style="{{ micBtnStyle }}">
+                    <span style="position:relative;display:inline-flex">
+                      <sc-if value="{{ recording }}" hint-placeholder-val="{{ false }}">
+                        <span style="position:absolute;inset:-8px;border-radius:50%;background:#fff;animation:pulsering 1.1s ease-out infinite"></span>
+                      </sc-if>
+                      <svg width="26" height="26" viewBox="0 0 24 24" style="position:relative"><rect x="9" y="3" width="6" height="11" rx="3" fill="#fff"></rect><path d="M6 11a6 6 0 0 0 12 0M12 17v3" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"></path></svg>
+                    </span>
+                    {{ micLabel }}
+                  </button>
+                </div>
+                <div style="height:22px">
+                  <sc-if value="{{ recorded }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;align-items:center;gap:7px;color:#2FAE7A;font-weight:800;font-size:17px">
+                      <svg width="20" height="20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#9FD9B8"></circle><path d="M8 12.5l2.5 2.5 5-5.5" stroke="#fff" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                      {{ t_wellRead }}
+                    </div>
+                  </sc-if>
+                </div>
+              </div>
+
+              <!-- continue -->
+              <button onClick="{{ nextPage }}" style="position:absolute;right:28px;bottom:26px;display:inline-flex;align-items:center;gap:11px;border:none;cursor:pointer;background:var(--coralInk,#E08070);color:#fff;border-radius:30px;padding:16px 30px;font-family:var(--head,'Baloo 2',sans-serif);font-size:21px;font-weight:800;box-shadow:0 8px 0 rgba(0,0,0,0.14);white-space:nowrap">
+                {{ t_nextPage }}
+                <svg width="24" height="24" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6" stroke="#fff" stroke-width="2.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </button>
+            </div>
+          </sc-if>
+
+        </div>
+      </div>
+    </div>
+
+    <div style="font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#8a93a0;letter-spacing:.3px">Prototipo interactivo · Toca las islas para empezar · ES / EN</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:900},&quot;palette&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Tropical&quot;,&quot;Sorbete&quot;,&quot;Laguna&quot;],&quot;default&quot;:&quot;Tropical&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;headingFont&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Baloo 2&quot;,&quot;Quicksand&quot;,&quot;Comic Neue&quot;],&quot;default&quot;:&quot;Baloo 2&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;language&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Español&quot;,&quot;English&quot;],&quot;default&quot;:&quot;Español&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;childName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Sofía&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = {
+      screen: 'home', langOverride: null, stars: 3,
+      mIdx: 0, mPicked: null, mStatus: null, celebrate: false,
+      rPage: 0, speaking: false, recording: false, recorded: false,
+      showHelp: false
+    };
+  }
+
+  problems() {
+    return [
+      { a: 3, b: 2, answer: 5, options: [4, 5, 6] },
+      { a: 4, b: 3, answer: 7, options: [6, 7, 8] },
+      { a: 2, b: 5, answer: 7, options: [7, 8, 9] }
+    ];
+  }
+  pages() {
+    return [
+      { es: 'El pequeño barco navega por el mar azul.', en: 'The little boat sails on the blue sea.' },
+      { es: 'El sol brilla sobre la isla feliz.', en: 'The sun shines over the happy island.' },
+      { es: 'Una palmera verde baila con el viento.', en: 'A green palm tree dances in the wind.' }
+    ];
+  }
+  lang() { return this.state.langOverride || (this.props.language === 'English' ? 'en' : 'es'); }
+
+  go(s) {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    clearTimeout(this._rt);
+    this.setState({ screen: s, mStatus: null, mPicked: null, celebrate: false, rPage: 0, speaking: false, recording: false, recorded: false, showHelp: false });
+  }
+  pick(v) {
+    const p = this.problems()[this.state.mIdx];
+    if (this.state.mStatus === 'correct') return;
+    if (v === p.answer) this.setState(s => ({ mPicked: v, mStatus: 'correct', celebrate: true, stars: s.stars + 1 }));
+    else this.setState({ mPicked: v, mStatus: 'wrong' });
+  }
+  nextProblem() {
+    const n = this.state.mIdx + 1;
+    if (n >= this.problems().length) this.setState({ screen: 'home', mIdx: 0, mPicked: null, mStatus: null, celebrate: false });
+    else this.setState({ mIdx: n, mPicked: null, mStatus: null, celebrate: false });
+  }
+  speak(text) {
+    if (!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = this.lang() === 'en' ? 'en-US' : 'es-ES';
+    u.rate = 0.85; u.pitch = 1.12;
+    u.onend = () => this.setState({ speaking: false });
+    this.setState({ speaking: true });
+    window.speechSynthesis.speak(u);
+  }
+  record() {
+    if (this.state.recording) return;
+    this.setState({ recording: true, recorded: false });
+    clearTimeout(this._rt);
+    this._rt = setTimeout(() => this.setState(s => ({ recording: false, recorded: true, stars: s.stars + 1 })), 1800);
+  }
+  nextPage() {
+    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    const n = this.state.rPage + 1;
+    if (n >= this.pages().length) this.setState({ screen: 'home', rPage: 0, recorded: false, speaking: false, recording: false });
+    else this.setState({ rPage: n, recorded: false, speaking: false, recording: false });
+  }
+  componentWillUnmount() { if (window.speechSynthesis) window.speechSynthesis.cancel(); clearTimeout(this._rt); }
+
+  renderVals() {
+    const lang = this.lang();
+    const L = {
+      es: { hi: '¡Hola', level: 'Nivel', adventure: 'Mi gran aventura', map: 'Mapa',
+        mathIsland: 'Isla de los Números', mathSub: 'Sumas divertidas', wordIsland: 'Isla de las Palabras', wordSub: 'Cuentos y lectura',
+        play: '¡Jugar!', mathTitle: '¿Cuántas en total?', help: 'Ayuda', helpTitle: 'El Profesor Banana dice', helpHint: 'Cuenta todas las manzanas juntas, empezando por la izquierda: 1, 2, 3...', gotit: '¡Entendido!',
+        great: '¡Genial! ¡Lo lograste!', almost: '¡Casi! Cuenta otra vez', next: 'Siguiente', listen: 'Escuchar', readAloud: 'Leer en voz alta', speaking: 'Leyendo...', listening: 'Escuchando...', wellRead: '¡Muy bien leído!', nextPage: 'Siguiente página', readingTitle: 'Mi cuento', page: 'Página' },
+      en: { hi: 'Hi', level: 'Level', adventure: 'My big adventure', map: 'Map',
+        mathIsland: 'Number Island', mathSub: 'Fun with sums', wordIsland: 'Word Island', wordSub: 'Stories & reading',
+        play: 'Play!', mathTitle: 'How many in all?', help: 'Help', helpTitle: 'Professor Banana says', helpHint: 'Count all the apples together, starting from the left: 1, 2, 3...', gotit: 'Got it!',
+        great: 'Awesome! You did it!', almost: 'Almost! Count again', next: 'Next', listen: 'Listen', readAloud: 'Read aloud', speaking: 'Reading...', listening: 'Listening...', wellRead: 'Great reading!', nextPage: 'Next page', readingTitle: 'My story', page: 'Page' }
+    };
+    const t = L[lang];
+
+    const palettes = {
+      Tropical: { bg: '#CFEAF7', bg2: '#8FCFE9', mint: '#BCE8CB', yellow: '#FBE4A0', coral: '#F7B3A8', lilac: '#DBC9F2', ink: '#38505E', accent: '#4FAEDB', coralInk: '#E08672' },
+      Sorbete: { bg: '#FCE7DA', bg2: '#F2B6A6', mint: '#CFE9BD', yellow: '#FBE2A0', coral: '#F6B7CC', lilac: '#D9C7EF', ink: '#5C4750', accent: '#E79B8C', coralInk: '#D77FA0' },
+      Laguna: { bg: '#D6EFEA', bg2: '#84CFC2', mint: '#BFE8D2', yellow: '#EAEFB0', coral: '#BFC9F2', lilac: '#CDBFF0', ink: '#33514F', accent: '#4FB6A6', coralInk: '#7E89D6' }
+    };
+    const p = palettes[this.props.palette] || palettes.Tropical;
+    const fonts = { 'Baloo 2': "'Baloo 2', system-ui, sans-serif", 'Quicksand': "'Quicksand', system-ui, sans-serif", 'Comic Neue': "'Comic Neue', system-ui, sans-serif" };
+    const head = fonts[this.props.headingFont] || fonts['Baloo 2'];
+    const childName = this.props.childName || 'Sofía';
+
+    const screenStyle = {
+      position: 'absolute', inset: 0, fontFamily: "'Nunito', system-ui, sans-serif", color: p.ink,
+      '--bg': p.bg, '--bg2': p.bg2, '--mint': p.mint, '--yellow': p.yellow, '--coral': p.coral, '--lilac': p.lilac, '--ink': p.ink, '--accent': p.accent, '--coralInk': p.coralInk, '--head': head
+    };
+
+    const prob = this.problems()[this.state.mIdx];
+    const solved = this.state.mStatus === 'correct';
+    const optColors = [p.mint, p.yellow, p.lilac];
+    const options = prob.options.map((v, i) => {
+      const picked = this.state.mPicked === v;
+      const correct = solved && v === prob.answer;
+      const wrong = picked && this.state.mStatus === 'wrong';
+      const base = {
+        position: 'relative', width: '136px', height: '108px', border: 'none', cursor: solved ? 'default' : 'pointer',
+        borderRadius: '28px', background: optColors[i % 3], color: p.ink,
+        fontFamily: head, fontSize: '46px', fontWeight: 800,
+        boxShadow: '0 8px 0 rgba(0,0,0,0.10)', transition: 'transform .15s', display: 'flex', alignItems: 'center', justifyContent: 'center'
+      };
+      if (correct) { base.boxShadow = '0 0 0 5px #2FAE7A, 0 8px 0 rgba(0,0,0,0.10)'; }
+      if (wrong) { base.animation = 'shake .4s ease'; base.boxShadow = '0 0 0 5px #E58A7E, 0 8px 0 rgba(0,0,0,0.10)'; }
+      if (solved && !correct) { base.opacity = 0.45; }
+      const markStyle = {
+        position: 'absolute', top: '-12px', right: '-12px', width: '36px', height: '36px', borderRadius: '50%',
+        background: correct ? '#2FAE7A' : '#E58A7E', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        fontSize: '22px', fontWeight: 900, boxShadow: '0 4px 10px rgba(0,0,0,0.18)'
+      };
+      return { value: v, onClick: () => this.pick(v), style: base, showMark: correct || wrong, mark: correct ? '✓' : '✕', markStyle };
+    });
+
+    const answerBoxStyle = {
+      width: '120px', height: '120px', borderRadius: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: head, fontSize: '58px', fontWeight: 800,
+      background: solved ? '#9FD9B8' : '#fff', color: solved ? '#1f6e4d' : p.ink,
+      boxShadow: solved ? '0 0 0 5px #2FAE7A, 0 14px 30px rgba(50,80,110,0.12)' : 'inset 0 0 0 4px ' + p.yellow + ', 0 14px 30px rgba(50,80,110,0.12)'
+    };
+    const answerBoxText = solved ? String(prob.answer) : '?';
+
+    const confetti = this.state.celebrate ? Array.from({ length: 18 }).map((_, i) => {
+      const cols = ['#FBE4A0', '#F7B3A8', '#BCE8CB', '#DBC9F2', '#5CB8E0', '#FBC13E'];
+      return { style: {
+        position: 'absolute', top: '-20px', left: (4 + Math.random() * 92) + '%',
+        width: (8 + Math.random() * 9) + 'px', height: (8 + Math.random() * 9) + 'px',
+        background: cols[i % cols.length], borderRadius: i % 2 ? '50%' : '3px',
+        animation: 'fall ' + (1.2 + Math.random() * 0.8) + 's linear ' + (Math.random() * 0.4) + 's forwards'
+      } };
+    }) : [];
+
+    const page = this.pages()[this.state.rPage];
+    const sentence = page[lang];
+
+    const langBtn = (active) => ({
+      border: 'none', cursor: 'pointer', borderRadius: '22px', padding: '7px 14px',
+      fontFamily: head, fontWeight: 800, fontSize: '15px',
+      background: active ? p.accent : 'transparent', color: active ? '#fff' : p.ink, opacity: active ? 1 : 0.6
+    });
+
+    const audioBtn = (active, color) => ({
+      display: 'inline-flex', alignItems: 'center', gap: '11px', border: 'none', cursor: 'pointer',
+      borderRadius: '30px', padding: '15px 26px 15px 18px', background: color, color: '#fff',
+      fontFamily: head, fontSize: '19px', fontWeight: 800, whiteSpace: 'nowrap',
+      boxShadow: active ? '0 0 0 5px rgba(255,255,255,0.5), 0 8px 0 rgba(0,0,0,0.12)' : '0 8px 0 rgba(0,0,0,0.12)'
+    });
+
+    const doneCount = (this.state.stars - 3);
+    const pct = Math.max(0, Math.min(100, this.state.stars / 10 * 100));
+
+    return {
+      screenStyle,
+      isHome: this.state.screen === 'home', isMath: this.state.screen === 'math', isReading: this.state.screen === 'reading',
+      greeting: t.hi + ', ' + childName + '!',
+      levelLabel: t.level + ' 2',
+      starsLabel: this.state.stars + '/10',
+      stars: this.state.stars,
+      progStyle: { height: '100%', width: pct + '%', borderRadius: '8px', background: p.accent, transition: 'width .4s ease' },
+      esBtnStyle: langBtn(lang === 'es'), enBtnStyle: langBtn(lang === 'en'),
+      setEs: () => this.setState({ langOverride: 'es' }), setEn: () => this.setState({ langOverride: 'en' }),
+      goMath: () => this.go('math'), goReading: () => this.go('reading'), goHome: () => this.go('home'),
+      t_adventure: t.adventure, t_mathIsland: t.mathIsland, t_mathSub: t.mathSub, t_wordIsland: t.wordIsland, t_wordSub: t.wordSub,
+      t_play: t.play, t_map: t.map, t_mathTitle: t.mathTitle, t_help: t.help, t_helpTitle: t.helpTitle, t_helpHint: t.helpHint, t_gotit: t.gotit,
+      t_great: t.great, t_almost: t.almost, t_next: t.next, t_wellRead: t.wellRead, t_nextPage: t.nextPage, t_readingTitle: t.readingTitle,
+      appleA: Array.from({ length: prob.a }), appleB: Array.from({ length: prob.b }),
+      probA: prob.a, probB: prob.b,
+      options, answerBoxStyle, answerBoxText,
+      showWrong: this.state.mStatus === 'wrong', showCorrect: solved && !this.state.celebrate,
+      celebrate: this.state.celebrate, confetti,
+      showHelp: this.state.showHelp, openHelp: () => this.setState({ showHelp: true }), closeHelp: () => this.setState({ showHelp: false }),
+      nextProblem: () => this.nextProblem(),
+      sentence, pageLabel: t.page + ' ' + (this.state.rPage + 1) + '/' + this.pages().length,
+      speakSentence: () => this.speak(sentence), recordVoice: () => this.record(), nextPage: () => this.nextPage(),
+      recording: this.state.recording, recorded: this.state.recorded,
+      listenLabel: this.state.speaking ? t.speaking : t.listen,
+      micLabel: this.state.recording ? t.listening : t.readAloud,
+      listenBtnStyle: audioBtn(this.state.speaking, p.accent),
+      micBtnStyle: audioBtn(this.state.recording, p.coralInk)
+    };
+  }
+}
+</script>
+</body>
+</html>

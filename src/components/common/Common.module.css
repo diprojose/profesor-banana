@@ -1,0 +1,59 @@
+.starCounter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 30px;
+  padding: 9px 18px 9px 13px;
+  box-shadow: 0 8px 18px rgba(50, 80, 110, 0.16);
+}
+
+.starCounterValue {
+  font-family: var(--head);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.langToggle {
+  display: flex;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 30px;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(50, 80, 110, 0.12);
+}
+
+.langButton {
+  border: none;
+  cursor: pointer;
+  border-radius: 22px;
+  padding: 7px 14px;
+  font-family: var(--head);
+  font-weight: 800;
+  font-size: 15px;
+  background: transparent;
+  color: var(--ink);
+  opacity: 0.6;
+}
+
+.langButtonActive {
+  background: var(--accent);
+  color: #fff;
+  opacity: 1;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  background: #fff;
+  border-radius: 24px;
+  padding: 11px 18px;
+  box-shadow: 0 6px 14px rgba(50, 80, 110, 0.14);
+  font-family: var(--head);
+  font-weight: 800;
+  font-size: 16px;
+  color: var(--ink);
+}
