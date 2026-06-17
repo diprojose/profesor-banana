@@ -6,7 +6,13 @@ import { type Operation, type GeneratorConfig } from '../game/types';
 import { type Progress } from '../progress/progress';
 import { type LevelInfo } from '../progress/levels';
 
-export type Screen = 'home' | 'math' | 'reading' | 'settings' | 'achievements';
+export type Screen =
+  | 'home'
+  | 'math'
+  | 'reading'
+  | 'english'
+  | 'settings'
+  | 'achievements';
 
 /** Recompensa pendiente de celebrar (subida de nivel o medalla nueva). */
 export type Reward =
@@ -73,6 +79,8 @@ export interface AppContextValue {
   recordWrongAnswer: () => void;
   /** Página leída en voz alta (+1 estrella). */
   recordPageRead: () => void;
+  /** Palabra de inglés acertada (+1 estrella). */
+  recordEnglishCorrect: () => void;
   resetProgress: () => void;
 
   // Recompensas por celebrar (cola)

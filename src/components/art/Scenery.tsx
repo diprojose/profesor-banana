@@ -169,6 +169,51 @@ export function WordIslandArt() {
   );
 }
 
+/** Isla del Inglés (botón del mapa): isla con un globo "Hi!". */
+export function EnglishIslandArt() {
+  return (
+    <svg width="252" height="168" viewBox="0 0 240 168">
+      <ellipse cx="120" cy="150" rx="112" ry="16" fill="#fff" opacity="0.35" />
+      <ellipse cx="120" cy="130" rx="98" ry="24" fill="#F3DCA6" />
+      <path
+        d="M26 124 Q 120 90 214 124 Q 180 110 120 108 Q 60 110 26 124 Z"
+        fill="var(--mint)"
+      />
+      {/* Cartelito con la bandera-mundo y "Hi!" */}
+      <g transform="translate(96 40)">
+        <circle cx="22" cy="34" r="34" fill="#fff" stroke="var(--accent)" strokeWidth="6" />
+        <circle cx="22" cy="34" r="26" fill="#BFE0F5" />
+        <path
+          d="M2 28 Q 22 22 42 28 M2 40 Q 22 46 42 40 M22 8 Q 34 34 22 60 M22 8 Q 10 34 22 60"
+          stroke="var(--accent)"
+          strokeWidth="2.4"
+          fill="none"
+          opacity="0.7"
+        />
+      </g>
+      <g transform="translate(150 30)">
+        <path
+          d="M2 6 Q2 0 8 0 H46 Q52 0 52 6 V26 Q52 32 46 32 H22 L12 42 L14 32 H8 Q2 32 2 26 Z"
+          fill="#fff"
+          stroke="var(--coral)"
+          strokeWidth="3"
+        />
+        <text
+          x="27"
+          y="23"
+          textAnchor="middle"
+          fontFamily="var(--head)"
+          fontSize="18"
+          fontWeight="800"
+          fill="var(--coralInk)"
+        >
+          Hi!
+        </text>
+      </g>
+    </svg>
+  );
+}
+
 /** Ilustración del cuento (Isla de las Palabras / lectura). */
 export function StorybookScene() {
   return (

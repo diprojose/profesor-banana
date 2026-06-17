@@ -1,0 +1,228 @@
+.root {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 26px;
+  z-index: 5;
+}
+
+.title {
+  font-family: var(--head);
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+.starsPill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border-radius: 30px;
+  padding: 9px 18px 9px 13px;
+  box-shadow: 0 6px 14px rgba(50, 80, 110, 0.14);
+}
+
+.starsValue {
+  font-family: var(--head);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  padding: 0 30px 10px;
+}
+
+/* Tarjeta con el dibujo (emoji) */
+.pictureCard {
+  background: #fff;
+  border-radius: 36px;
+  padding: 24px 40px;
+  box-shadow: 0 16px 34px rgba(50, 80, 110, 0.14);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.emoji {
+  font-size: 128px;
+  line-height: 1;
+  animation: bob 3s ease-in-out infinite;
+}
+
+.hearButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 26px;
+  padding: 12px 24px 12px 18px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--head);
+  font-size: 18px;
+  font-weight: 800;
+  box-shadow: 0 6px 0 rgba(0, 0, 0, 0.12);
+}
+
+.hearButtonActive {
+  box-shadow:
+    0 0 0 5px rgba(255, 255, 255, 0.5),
+    0 6px 0 rgba(0, 0, 0, 0.12);
+}
+
+.feedbackRow {
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.feedbackWrong {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--coralInk);
+  font-weight: 800;
+  font-size: 19px;
+}
+
+/* Opciones de palabra */
+.options {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 0 30px 26px;
+}
+
+.optionButton {
+  position: relative;
+  min-width: 180px;
+  border: none;
+  border-radius: 26px;
+  padding: 20px 26px;
+  color: var(--ink);
+  font-family: var(--head);
+  font-size: 30px;
+  font-weight: 800;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s;
+  cursor: pointer;
+  text-transform: lowercase;
+}
+
+.optionMark {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 900;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
+}
+
+/* Celebración */
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(40, 60, 75, 0.28);
+  z-index: 20;
+}
+
+.celebrateCard {
+  background: #fff;
+  border-radius: 36px;
+  padding: 30px 44px;
+  box-shadow: 0 24px 60px rgba(30, 50, 70, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  animation: pop 0.4s ease both;
+}
+
+.celebrateEmoji {
+  font-size: 96px;
+  line-height: 1;
+  animation: bob 2.2s ease-in-out infinite;
+}
+
+.celebrateWord {
+  font-family: var(--head);
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: lowercase;
+}
+
+.celebrateEs {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ink);
+  opacity: 0.6;
+}
+
+.celebrateButtons {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.nextButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: none;
+  cursor: pointer;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 26px;
+  padding: 14px 30px;
+  font-family: var(--head);
+  font-size: 20px;
+  font-weight: 800;
+  box-shadow: 0 7px 0 rgba(0, 0, 0, 0.14);
+}
+
+.replayButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: none;
+  cursor: pointer;
+  background: var(--mint);
+  color: var(--ink);
+  border-radius: 26px;
+  padding: 14px 24px;
+  font-family: var(--head);
+  font-size: 20px;
+  font-weight: 800;
+  box-shadow: 0 7px 0 rgba(0, 0, 0, 0.1);
+}

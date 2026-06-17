@@ -13,6 +13,8 @@ export interface Progress {
   mathSolved: number;
   /** Páginas leídas en voz alta. */
   pagesRead: number;
+  /** Palabras de inglés acertadas. */
+  englishLearned: number;
   /** Racha actual de aciertos seguidos en matemáticas. */
   currentStreak: number;
   /** Mejor racha alcanzada. */
@@ -25,6 +27,7 @@ export const initialProgress: Progress = {
   stars: 0,
   mathSolved: 0,
   pagesRead: 0,
+  englishLearned: 0,
   currentStreak: 0,
   bestStreak: 0,
   unlockedMedals: [],
@@ -35,6 +38,7 @@ export type ProgressEvent =
   | { type: 'math-correct' }
   | { type: 'math-wrong' }
   | { type: 'page-read' }
+  | { type: 'english-correct' }
   | { type: 'reset' };
 
 /** Aplica un evento y recalcula las medallas desbloqueadas. */
@@ -66,6 +70,14 @@ export function progressReducer(
         ...state,
         stars: state.stars + 1,
         pagesRead: state.pagesRead + 1,
+      };
+      break;
+    }
+    case 'english-correct': {
+      next = {
+        ...state,
+        stars: state.stars + 1,
+        englishLearned: state.englishLearned + 1,
       };
       break;
     }

@@ -26,7 +26,8 @@ src/
 │  ├─ mathGenerator.ts      Lógica pura y testeable
 │  └─ mathGenerator.test.ts Tests del generador
 ├─ i18n/strings.ts          Textos ES / EN
-├─ content/readingPages.ts  Frases del cuento
+├─ content/stories.ts       Cuentos (varias páginas ES / EN)
+├─ english/                 🇬🇧 Isla del Inglés (vocabulario + generador)
 ├─ theme/                   Paletas de color y fuentes (tokens)
 ├─ state/                   Contexto global (pantalla, idioma, estrellas, ajustes)
 ├─ hooks/useSpeech.ts       Text-to-Speech (lectura en voz alta)
@@ -91,8 +92,33 @@ medallas) vive en `src/progress/` y se guarda en `localStorage`
   concretas usando los números del problema (contar desde el mayor, contar
   hacia atrás, trabajar por columnas...).
 
+## Lectura con corrección real 🎤
+
+- "Escuchar" lee la frase en voz alta (TTS).
+- El botón del micrófono **graba de verdad** con la Web Speech API
+  (`src/hooks/useSpeechRecognition.ts`, Chrome/Edge): transcribe lo que dice
+  el niño y lo compara con la frase (`src/game/readingCheck.ts`).
+- La frase se pinta **palabra por palabra**: verde = bien leída, naranja
+  subrayada = falta practicar. Da estrella solo si lee bien (≥80%), una vez
+  por página.
+- Si el navegador no soporta reconocimiento, el botón pasa a confirmación
+  manual ("Ya lo leí").
+
+## Isla del Inglés 🇬🇧
+
+- Muestra un dibujo (emoji grande) y opciones del nombre en inglés
+  (opción múltiple, como las sumas).
+- Botón 🔊 para oír la **pronunciación** en inglés.
+- Suma estrellas, medallas y la estadística "palabras en inglés".
+- Vocabulario en `src/english/vocabulary.ts` (fácil de ampliar).
+
+## Cuentos múltiples
+
+- Selector de cuentos al entrar a la Isla de las Palabras.
+- El botón de avanzar **solo aparece cuando el niño lee bien** la página.
+
 ## Próximos pasos sugeridos
 
-- Más operaciones (multiplicación) y más cuentos/niveles de lectura.
+- Más operaciones (multiplicación) y más cuentos/vocabulario.
 - Avatar del niño personalizable.
 - Sonidos de acierto/celebración.

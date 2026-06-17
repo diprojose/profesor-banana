@@ -119,8 +119,8 @@
 /* ---- Estadísticas ---- */
 .stats {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
 }
 
 .statBox {

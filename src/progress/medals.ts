@@ -72,6 +72,24 @@ export const medals: MedalDef[] = [
     },
   },
   {
+    id: 'english-5',
+    emoji: '🗣️',
+    isUnlocked: (p) => p.englishLearned >= 5,
+    text: {
+      es: { name: 'Hello!', desc: 'Aprende 5 palabras en inglés' },
+      en: { name: 'Hello!', desc: 'Learn 5 English words' },
+    },
+  },
+  {
+    id: 'english-15',
+    emoji: '🌎',
+    isUnlocked: (p) => p.englishLearned >= 15,
+    text: {
+      es: { name: 'Pequeño políglota', desc: 'Aprende 15 palabras en inglés' },
+      en: { name: 'Little polyglot', desc: 'Learn 15 English words' },
+    },
+  },
+  {
     id: 'stars-25',
     emoji: '⭐',
     isUnlocked: (p) => p.stars >= 25,

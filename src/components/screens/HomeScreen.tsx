@@ -7,6 +7,7 @@ import {
   MapScenery,
   MathIslandArt,
   WordIslandArt,
+  EnglishIslandArt,
 } from '../art/Scenery';
 import { PlayIcon, GearIcon } from '../icons/Icons';
 
@@ -80,6 +81,23 @@ export function HomeScreen() {
             <div className={styles.islandTitle}>{t.mathIsland}</div>
             <div className={styles.islandSub}>{t.mathSub}</div>
             <div className={`${styles.playBadge} ${styles.playBadgeMath}`}>
+              <PlayIcon size={14} />
+              {t.play}
+            </div>
+          </div>
+        </button>
+
+        <button
+          className={`${styles.islandButton} ${styles.islandEnglish}`}
+          onClick={() => goTo('english')}
+        >
+          <div className={styles.islandFloat}>
+            <EnglishIslandArt />
+          </div>
+          <div className={styles.islandCard}>
+            <div className={styles.islandTitle}>{t.englishIsland}</div>
+            <div className={styles.islandSub}>{t.englishSub}</div>
+            <div className={`${styles.playBadge} ${styles.playBadgeEnglish}`}>
               <PlayIcon size={14} />
               {t.play}
             </div>

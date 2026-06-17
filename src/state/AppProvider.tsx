@@ -103,6 +103,10 @@ export function AppProvider({ children, initialLang = 'es' }: AppProviderProps) 
     () => dispatchProgress({ type: 'page-read' }),
     [dispatchProgress],
   );
+  const recordEnglishCorrect = useCallback(
+    () => dispatchProgress({ type: 'english-correct' }),
+    [dispatchProgress],
+  );
   const resetProgress = useCallback(() => {
     progressRef.current = initialProgress;
     setProgress(initialProgress);
@@ -174,6 +178,7 @@ export function AppProvider({ children, initialLang = 'es' }: AppProviderProps) 
       recordCorrectAnswer,
       recordWrongAnswer,
       recordPageRead,
+      recordEnglishCorrect,
       resetProgress,
       rewards,
       dismissReward,
@@ -194,6 +199,7 @@ export function AppProvider({ children, initialLang = 'es' }: AppProviderProps) 
     recordCorrectAnswer,
     recordWrongAnswer,
     recordPageRead,
+    recordEnglishCorrect,
     resetProgress,
     rewards,
     dismissReward,

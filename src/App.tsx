@@ -3,6 +3,7 @@ import { DeviceFrame } from './components/layout/DeviceFrame';
 import { HomeScreen } from './components/screens/HomeScreen';
 import { MathScreen } from './components/screens/MathScreen';
 import { ReadingScreen } from './components/screens/ReadingScreen';
+import { EnglishScreen } from './components/screens/EnglishScreen';
 import { SettingsScreen } from './components/screens/SettingsScreen';
 import { AchievementsScreen } from './components/screens/AchievementsScreen';
 import { RewardOverlay } from './components/common/RewardOverlay';
@@ -15,6 +16,8 @@ function CurrentScreen() {
       return <MathScreen />;
     case 'reading':
       return <ReadingScreen />;
+    case 'english':
+      return <EnglishScreen />;
     case 'settings':
       return <SettingsScreen />;
     case 'achievements':

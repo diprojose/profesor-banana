@@ -35,6 +35,32 @@ export const strings = {
     page: 'Página',
     subtitle: 'Prototipo interactivo · Toca las islas para empezar · ES / EN',
 
+    // Lectura: grabar y corregir
+    tapToRead: 'Toca el micrófono y lee la frase en voz alta',
+    listeningHint: 'Escuchando… lee sin prisa y toca el micrófono al terminar',
+    imDone: '¡Listo!',
+    playMyReading: 'Escucharme',
+    heard: 'Escuché',
+    almostReading: '¡Casi! Vuelve a intentarlo',
+    tryAgainReading: 'Inténtalo otra vez, ¡tú puedes!',
+    readAgain: 'Leer otra vez',
+    micDenied: 'Necesito permiso para usar el micrófono 🎤',
+    recognitionUnsupported:
+      'Este navegador no puede grabar la voz. Prueba en Chrome o Edge.',
+    iReadIt: 'Ya lo leí',
+    // Cuentos (selección y avance)
+    stories: 'Cuentos',
+    chooseStory: 'Elige un cuento',
+    pagesCount: 'páginas',
+    nextStory: 'Siguiente cuento',
+    finishStory: 'Terminar',
+    readToContinue: 'Lee bien la frase para continuar ✨',
+    // Isla del Inglés
+    englishIsland: 'Isla del Inglés',
+    englishSub: 'Aprende palabras',
+    englishTitle: '¿Cómo se dice en inglés?',
+    statsEnglish: 'Palabras en inglés',
+
     // Ajustes
     settings: 'Ajustes',
     settingsTitle: 'Ajustes',
@@ -122,6 +148,32 @@ export const strings = {
     readingTitle: 'My story',
     page: 'Page',
     subtitle: 'Interactive prototype · Tap the islands to start · ES / EN',
+
+    // Reading: record and check
+    tapToRead: 'Tap the microphone and read the sentence aloud',
+    listeningHint: 'Listening… read at your own pace and tap the mic when you finish',
+    imDone: 'Done!',
+    playMyReading: 'Hear myself',
+    heard: 'I heard',
+    almostReading: 'Almost! Try again',
+    tryAgainReading: "Try again, you can do it!",
+    readAgain: 'Read again',
+    micDenied: 'I need permission to use the microphone 🎤',
+    recognitionUnsupported:
+      "This browser can't record voice. Try Chrome or Edge.",
+    iReadIt: 'I read it',
+    // Stories (selection and advancing)
+    stories: 'Stories',
+    chooseStory: 'Choose a story',
+    pagesCount: 'pages',
+    nextStory: 'Next story',
+    finishStory: 'Finish',
+    readToContinue: 'Read the sentence well to continue ✨',
+    // English Island
+    englishIsland: 'English Island',
+    englishSub: 'Learn words',
+    englishTitle: 'What is it in English?',
+    statsEnglish: 'English words',
 
     // Settings
     settings: 'Settings',

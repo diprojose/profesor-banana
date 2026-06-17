@@ -160,13 +160,18 @@
 }
 
 .islandMath {
-  left: 64px;
-  bottom: 54px;
+  left: 362px;
+  bottom: 30px;
+}
+
+.islandEnglish {
+  left: 36px;
+  top: 30px;
 }
 
 .islandWord {
-  right: 74px;
-  top: 36px;
+  right: 40px;
+  top: 30px;
 }
 
 .islandFloat {
@@ -223,4 +228,8 @@
 
 .playBadgeWord {
   background: var(--coralInk);
+}
+
+.playBadgeEnglish {
+  background: #7c6fd1;
 }

@@ -51,10 +51,10 @@ export function HomeIcon({ size = 20, color = 'var(--accent)' }: IconProps & { c
   );
 }
 
-export function PlayIcon({ size = 14 }: IconProps) {
+export function PlayIcon({ size = 14, color = '#fff' }: IconProps & { color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24">
-      <path d="M7 5l12 7-12 7z" fill="#fff" />
+      <path d="M7 5l12 7-12 7z" fill={color} />
     </svg>
   );
 }
@@ -117,13 +117,13 @@ export function GearIcon({ size = 26, color = 'var(--ink)' }: IconProps & { colo
   );
 }
 
-export function SpeakerIcon({ size = 26 }: IconProps) {
+export function SpeakerIcon({ size = 26, color = '#fff' }: IconProps & { color?: string }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24">
-      <path d="M4 9v6h4l5 4V5L8 9z" fill="#fff" />
+      <path d="M4 9v6h4l5 4V5L8 9z" fill={color} />
       <path
         d="M16 8.5a4 4 0 0 1 0 7M18.5 6a7 7 0 0 1 0 12"
-        stroke="#fff"
+        stroke={color}
         strokeWidth="2"
         fill="none"
         strokeLinecap="round"
