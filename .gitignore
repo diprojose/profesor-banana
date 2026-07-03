@@ -25,3 +25,10 @@ Thumbs.db
 
 # Vite cache
 .vite
+
+# TypeScript incremental build info
+*.tsbuildinfo
+
+# Firebase
+.firebase
+firebase-debug.log

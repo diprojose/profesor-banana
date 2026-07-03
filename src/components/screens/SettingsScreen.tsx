@@ -3,7 +3,6 @@ import { useApp } from '../../state/useApp';
 import { BackToMapButton } from '../common/BackToMapButton';
 import {
   Segmented,
-  MultiToggle,
   Toggle,
   Stepper,
   Slider,
@@ -12,7 +11,7 @@ import {
 } from '../settings/Controls';
 import { palettes, paletteNames } from '../../theme/palettes';
 import { headingFontNames, headingFonts } from '../../theme/fonts';
-import { type Operation } from '../../game/types';
+import { gradeOrder, type Grade } from '../../game/grades';
 import { type DifficultyMode } from '../../state/AppContext';
 import { type Lang } from '../../i18n/strings';
 import {
@@ -34,6 +33,12 @@ export function SettingsScreen() {
     updateSpeech,
     resetSettings,
     headingFontFamily,
+    goTo,
+    authStatus,
+    userEmail,
+    accountsEnabled,
+    signOutAccount,
+    goToAuth,
   } = useApp();
 
   const { math, speech } = settings;
@@ -63,10 +68,16 @@ export function SettingsScreen() {
   const currentPreset: DifficultyPreset | 'custom' =
     matchPreset(math) ?? 'custom';
 
-  const operationOptions: SegmentedOption<Operation>[] = [
-    { value: 'addition', label: t.addition },
-    { value: 'subtraction', label: t.subtraction },
-  ];
+  const gradeLabels: Record<Grade, string> = {
+    preschool: t.gradePreschool,
+    grade1: t.grade1,
+    grade2: t.grade2,
+    grade3: t.grade3,
+  };
+  const gradeOptions: SegmentedOption<Grade>[] = gradeOrder.map((g) => ({
+    value: g,
+    label: gradeLabels[g],
+  }));
 
   const modeOptions: SegmentedOption<DifficultyMode>[] = [
     { value: 'auto', label: t.modeAuto },
@@ -76,16 +87,6 @@ export function SettingsScreen() {
   // --- Handlers ---
   const applyDifficulty = (value: DifficultyPreset | 'custom') => {
     if (value !== 'custom') updateMath(difficultyPresets[value]);
-  };
-
-  const toggleOperation = (op: Operation) => {
-    const has = math.operations.includes(op);
-    // No permitir quedarse sin ninguna operación.
-    if (has && math.operations.length === 1) return;
-    const next = has
-      ? math.operations.filter((o) => o !== op)
-      : [...math.operations, op];
-    updateMath({ operations: next });
   };
 
   const handleReset = () => {
@@ -119,9 +120,17 @@ export function SettingsScreen() {
                 onChange={(e) => updateSettings({ childName: e.target.value })}
               />
             </div>
+            <div className={styles.row}>
+              <button
+                className={styles.accountButton}
+                onClick={() => goTo('profiles')}
+              >
+                👧 {t.switchProfile}
+              </button>
+            </div>
           </section>
 
-          {/* Idioma */}
+          {/* Idioma + Cuenta */}
           <section className={styles.card}>
             <div className={styles.cardTitle}>{t.languageSection}</div>
             <div className={styles.row}>
@@ -132,6 +141,37 @@ export function SettingsScreen() {
                 onChange={setLang}
               />
             </div>
+
+            {accountsEnabled && (
+              <>
+                <div className={styles.divider} />
+                <div className={styles.cardTitle}>{t.accountSection}</div>
+                {authStatus === 'signedIn' ? (
+                  <>
+                    <div className={styles.note}>
+                      {userEmail} · {t.accountCloudNote}
+                    </div>
+                    <div className={styles.row}>
+                      <button
+                        className={styles.accountButton}
+                        onClick={() => void signOutAccount()}
+                      >
+                        {t.signOut}
+                      </button>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className={styles.note}>{t.accountLocalNote}</div>
+                    <div className={styles.row}>
+                      <button className={styles.accountButton} onClick={goToAuth}>
+                        {t.createAccountCta}
+                      </button>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
           </section>
 
           {/* Apariencia */}
@@ -181,24 +221,25 @@ export function SettingsScreen() {
           <section className={`${styles.card} ${styles.cardWide}`}>
             <div className={styles.cardTitle}>{t.mathSection}</div>
 
+            {/* Grado escolar: decide qué operaciones y números ve el niño */}
+            <div className={styles.row}>
+              <span className={styles.rowLabel}>{t.gradeLabel}</span>
+              <Segmented
+                options={gradeOptions}
+                value={settings.grade}
+                onChange={(grade) => updateSettings({ grade })}
+              />
+            </div>
+            <div className={styles.note}>{t.gradeNote}</div>
+
+            <div className={styles.divider} />
+
             <div className={styles.row}>
               <span className={styles.rowLabel}>{t.difficultyModeLabel}</span>
               <Segmented
                 options={modeOptions}
                 value={math.mode}
                 onChange={(mode) => updateMath({ mode })}
-              />
-            </div>
-
-            <div className={styles.divider} />
-
-            {/* Operaciones: aplican en ambos modos */}
-            <div className={styles.row}>
-              <span className={styles.rowLabel}>{t.operationsLabel}</span>
-              <MultiToggle
-                options={operationOptions}
-                selected={math.operations}
-                onToggle={toggleOperation}
               />
             </div>
 

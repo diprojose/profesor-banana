@@ -39,15 +39,24 @@ function shuffle<T>(rng: Random, items: readonly T[]): T[] {
 /**
  * Construye un conjunto de opciones que incluye la respuesta correcta
  * más distractores cercanos, únicos y no negativos.
+ * @param preferred Distractores preferidos (p. ej. productos vecinos
+ *   de la tabla en multiplicación) que se intentan usar primero.
  */
 function buildOptions(
   rng: Random,
   answer: number,
   optionCount: number,
+  preferred: number[] = [],
 ): number[] {
   const options = new Set<number>([answer]);
 
-  // Distractores: valores cercanos a la respuesta (±1, ±2, ...).
+  // Primero los distractores pedagógicos (mezclados, sin duplicar).
+  for (const candidate of shuffle(rng, preferred)) {
+    if (options.size >= optionCount) break;
+    if (candidate >= 0 && candidate !== answer) options.add(candidate);
+  }
+
+  // Luego valores cercanos a la respuesta (±1, ±2, ...).
   let spread = 1;
   let guard = 0;
   while (options.size < optionCount && guard < 50) {
@@ -68,6 +77,26 @@ function buildOptions(
   return shuffle(rng, [...options]);
 }
 
+/**
+ * Distractores preferidos: en multiplicación, productos vecinos de la
+ * tabla (6×7 → 6×6 y 6×8), que son los errores típicos; en división,
+ * cocientes vecinos. Para suma/resta no hay preferencia.
+ */
+function preferredDistractors(
+  operation: Operation,
+  a: number,
+  b: number,
+): number[] {
+  if (operation === 'multiplication') {
+    return [a * (b - 1), a * (b + 1), (a - 1) * b, (a + 1) * b];
+  }
+  if (operation === 'division') {
+    const q = a / b;
+    return [q - 1, q + 1, q + 2];
+  }
+  return [];
+}
+
 /** Genera los operandos para una operación respetando los límites. */
 function makeOperands(
   rng: Random,
@@ -75,6 +104,21 @@ function makeOperands(
   config: GeneratorConfig,
 ): { a: number; b: number; answer: number } {
   const { minOperand, maxOperand, maxAnswer } = config;
+  const maxTable = Math.max(2, config.maxTable ?? 5);
+
+  if (operation === 'multiplication') {
+    // a × b: un factor dentro de la tabla, el otro hasta 10.
+    const a = randInt(rng, 1, maxTable);
+    const b = randInt(rng, 1, 10);
+    return { a, b, answer: a * b };
+  }
+
+  if (operation === 'division') {
+    // División exacta: se construye desde la tabla (divisor × cociente).
+    const b = randInt(rng, 2, maxTable);
+    const quotient = randInt(rng, 1, 10);
+    return { a: b * quotient, b, answer: quotient };
+  }
 
   if (operation === 'subtraction') {
     // a - b, con a >= b para que el resultado no sea negativo.
@@ -106,21 +150,33 @@ export function generateProblem(
 ): MathProblem {
   const operation = pick(rng, config.operations);
   const { a, b, answer } = makeOperands(rng, operation, config);
-  const options = buildOptions(rng, answer, config.optionCount);
+  const options = buildOptions(
+    rng,
+    answer,
+    config.optionCount,
+    preferredDistractors(operation, a, b),
+  );
   return { a, b, operation, answer, options };
 }
 
 /**
- * Firma de un problema para detectar repeticiones. La suma es
- * conmutativa, así que 4+5 y 5+4 comparten firma; la resta no.
+ * Firma de un problema para detectar repeticiones. La suma y la
+ * multiplicación son conmutativas (4+5 y 5+4 comparten firma); la
+ * resta y la división no.
  */
 export function problemSignature(p: MathProblem): string {
-  if (p.operation === 'addition') {
-    const lo = Math.min(p.a, p.b);
-    const hi = Math.max(p.a, p.b);
-    return `add:${lo}:${hi}`;
+  const lo = Math.min(p.a, p.b);
+  const hi = Math.max(p.a, p.b);
+  switch (p.operation) {
+    case 'addition':
+      return `add:${lo}:${hi}`;
+    case 'multiplication':
+      return `mul:${lo}:${hi}`;
+    case 'division':
+      return `div:${p.a}:${p.b}`;
+    case 'subtraction':
+      return `sub:${p.a}:${p.b}`;
   }
-  return `sub:${p.a}:${p.b}`;
 }
 
 /**

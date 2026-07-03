@@ -5,11 +5,11 @@ import { defaultHeadingFont } from '../theme/fonts';
 /** Ajustes por defecto al abrir la app por primera vez. */
 export const defaultSettings: Settings = {
   childName: 'Sofía',
+  grade: 'grade1',
   palette: defaultPalette,
   headingFont: defaultHeadingFont,
   math: {
     mode: 'auto',
-    operations: ['addition'],
     maxOperand: 5,
     maxAnswer: 10,
     optionCount: 3,
@@ -27,19 +27,16 @@ export type MathPreset = Omit<MathSettings, 'mode'>;
 /** Presets rápidos de dificultad (modo manual) para Ajustes. */
 export const difficultyPresets = {
   easy: {
-    operations: ['addition'],
     maxOperand: 5,
     maxAnswer: 10,
     optionCount: 3,
   },
   medium: {
-    operations: ['addition', 'subtraction'],
     maxOperand: 10,
     maxAnswer: 20,
     optionCount: 3,
   },
   hard: {
-    operations: ['addition', 'subtraction'],
     maxOperand: 20,
     maxAnswer: 40,
     optionCount: 4,
@@ -55,11 +52,7 @@ export function matchPreset(math: MathSettings): DifficultyPreset | null {
     MathPreset,
   ][];
   for (const [name, preset] of entries) {
-    const sameOps =
-      preset.operations.length === math.operations.length &&
-      preset.operations.every((op) => math.operations.includes(op));
     if (
-      sameOps &&
       preset.maxOperand === math.maxOperand &&
       preset.maxAnswer === math.maxAnswer &&
       preset.optionCount === math.optionCount

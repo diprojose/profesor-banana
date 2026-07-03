@@ -16,7 +16,9 @@ import {
 } from '../../game/mathGenerator';
 import { operationSymbol } from '../../game/types';
 import { type MathProblem } from '../../game/types';
+import { topicsForGrade, type MathTopic } from '../../game/grades';
 import { getHints } from '../../game/hints';
+import { type Strings } from '../../i18n/strings';
 
 type Status = 'correct' | 'wrong' | null;
 
@@ -36,6 +38,44 @@ const APPLE_LIMIT = 10;
 
 /** Cuántos problemas recientes recordar para no repetirlos seguidos. */
 const RECENT_MEMORY = 5;
+
+/** Emoji de cada tema en el selector. */
+const topicEmoji: Record<MathTopic, string> = {
+  addition: '🍎',
+  subtraction: '🎈',
+  multiplication: '🧺',
+  division: '🍪',
+  mixed: '🎲',
+};
+
+function topicLabel(topic: MathTopic, t: Strings): string {
+  switch (topic) {
+    case 'addition':
+      return t.topicAddition;
+    case 'subtraction':
+      return t.topicSubtraction;
+    case 'multiplication':
+      return t.topicMultiplication;
+    case 'division':
+      return t.topicDivision;
+    case 'mixed':
+      return t.topicMixed;
+  }
+}
+
+/** Título de la pregunta según la operación del problema actual. */
+function titleFor(problem: MathProblem, t: Strings): string {
+  switch (problem.operation) {
+    case 'subtraction':
+      return t.mathTitleSub;
+    case 'multiplication':
+      return t.mathTitleMul;
+    case 'division':
+      return t.mathTitleDiv;
+    default:
+      return t.mathTitle;
+  }
+}
 
 function makeConfetti(): Confetto[] {
   return Array.from({ length: 18 }).map((_, i) => ({
@@ -59,6 +99,47 @@ function digitScale(problem: MathProblem): number {
   return 0.52;
 }
 
+/**
+ * Apoyo visual para multiplicar: `a` grupos de `b` manzanas.
+ * Solo con números pequeños; con grandes se trabaja con cifras.
+ */
+function GroupsVisual({ a, b }: { a: number; b: number }) {
+  if (a > 5 || b > 6) return null;
+  return (
+    <div className={styles.groupsRow}>
+      {Array.from({ length: a }).map((_, g) => (
+        <div key={g} className={styles.groupBox}>
+          {Array.from({ length: b }).map((_, i) => (
+            <Apple key={i} size={22} />
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Apoyo visual para repartir: `a` manzanas y `b` cestas con "?".
+ */
+function SharingVisual({ a, b }: { a: number; b: number }) {
+  if (a > 12 || b > 5) return null;
+  return (
+    <div className={styles.shareRow}>
+      <div className={styles.groupBox}>
+        {Array.from({ length: a }).map((_, i) => (
+          <Apple key={i} size={22} />
+        ))}
+      </div>
+      <span className={styles.shareArrow}>→</span>
+      {Array.from({ length: b }).map((_, i) => (
+        <span key={i} className={styles.basket}>
+          🧺<span className={styles.basketMark}>?</span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export function MathScreen() {
   const {
     t,
@@ -68,32 +149,59 @@ export function MathScreen() {
     recordWrongAnswer,
     palette,
     headingFontFamily,
-    mathConfig,
+    mathConfigFor,
+    settings,
   } = useApp();
+
+  const topics = topicsForGrade(settings.grade);
+
+  // Tema elegido; null → selector de temas.
+  const [topic, setTopic] = useState<MathTopic | null>(null);
 
   // Memoria de problemas recientes (firmas) para evitar repeticiones.
   const recentRef = useRef<string[]>([]);
 
-  const [problem, setProblem] = useState<MathProblem>(() => {
-    const p = generateDistinctProblem(mathConfig, recentRef.current);
-    recentRef.current = [problemSignature(p)];
-    return p;
-  });
+  const [problem, setProblem] = useState<MathProblem | null>(null);
   const [picked, setPicked] = useState<number | null>(null);
   const [status, setStatus] = useState<Status>(null);
   const [celebrate, setCelebrate] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
 
+  const startTopic = useCallback(
+    (next: MathTopic) => {
+      recentRef.current = [];
+      const p = generateDistinctProblem(mathConfigFor(next), []);
+      recentRef.current = [problemSignature(p)];
+      setTopic(next);
+      setProblem(p);
+      setPicked(null);
+      setStatus(null);
+      setCelebrate(false);
+    },
+    [mathConfigFor],
+  );
+
+  const backToTopics = useCallback(() => {
+    setTopic(null);
+    setProblem(null);
+    setPicked(null);
+    setStatus(null);
+    setCelebrate(false);
+    setShowHelp(false);
+  }, []);
+
   const solved = status === 'correct';
   const optionColors = [palette.mint, palette.yellow, palette.lilac];
 
-  const scale = useMemo(() => digitScale(problem), [problem]);
-  const showApples = problem.a <= APPLE_LIMIT && problem.b <= APPLE_LIMIT;
-  const hints = useMemo(() => getHints(problem, lang), [problem, lang]);
+  const scale = useMemo(() => (problem ? digitScale(problem) : 1), [problem]);
+  const hints = useMemo(
+    () => (problem ? getHints(problem, lang) : []),
+    [problem, lang],
+  );
 
   const pick = useCallback(
     (value: number) => {
-      if (status === 'correct') return;
+      if (!problem || status === 'correct') return;
       if (value === problem.answer) {
         setPicked(value);
         setStatus('correct');
@@ -105,11 +213,12 @@ export function MathScreen() {
         recordWrongAnswer();
       }
     },
-    [status, problem.answer, recordCorrectAnswer, recordWrongAnswer],
+    [problem, status, recordCorrectAnswer, recordWrongAnswer],
   );
 
   const nextProblem = useCallback(() => {
-    const p = generateDistinctProblem(mathConfig, recentRef.current);
+    if (!topic) return;
+    const p = generateDistinctProblem(mathConfigFor(topic), recentRef.current);
     recentRef.current = [problemSignature(p), ...recentRef.current].slice(
       0,
       RECENT_MEMORY,
@@ -118,12 +227,52 @@ export function MathScreen() {
     setPicked(null);
     setStatus(null);
     setCelebrate(false);
-  }, [mathConfig]);
+  }, [topic, mathConfigFor]);
 
   const confetti = useMemo(() => (celebrate ? makeConfetti() : []), [celebrate]);
 
+  // --- Selector de temas ---
+  if (topic === null || problem === null) {
+    return (
+      <div className={styles.root}>
+        <div className={styles.topBar}>
+          <BackToMapButton iconColor="var(--accent)" />
+          <div className={styles.title}>{t.chooseTopic}</div>
+          <div className={styles.starsPill}>
+            <StarIcon size={26} />
+            <span className={styles.starsValue}>{stars}</span>
+          </div>
+        </div>
+        <div className={styles.topicPicker}>
+          <div className={styles.topicGrid}>
+            {topics.map((item) => (
+              <button
+                key={item}
+                className={styles.topicCard}
+                onClick={() => startTopic(item)}
+              >
+                <span className={styles.topicEmoji}>{topicEmoji[item]}</span>
+                <span className={styles.topicName}>{topicLabel(item, t)}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // --- Vista de ejercicio ---
+  const isMultiplication = problem.operation === 'multiplication';
+  const isDivision = problem.operation === 'division';
+  const showApples =
+    (problem.operation === 'addition' || problem.operation === 'subtraction') &&
+    problem.a <= APPLE_LIMIT &&
+    problem.b <= APPLE_LIMIT;
+
+  // Tamaños fluidos: clamp() se adapta al viewport y `scale` encoge
+  // la cifra cuando tiene muchos dígitos.
   const answerBoxStyle: React.CSSProperties = {
-    fontSize: `${58 * scale}px`,
+    fontSize: `calc(clamp(34px, 9vw, 58px) * ${scale})`,
     ...(solved
       ? {
           background: '#9FD9B8',
@@ -137,22 +286,39 @@ export function MathScreen() {
         }),
   };
 
-  const operandNumberStyle = { fontSize: `${40 * scale}px` };
+  const operandNumberStyle = {
+    fontSize: `calc(clamp(26px, 7vw, 40px) * ${scale})`,
+  };
 
   return (
     <div className={styles.root}>
       {/* Barra superior */}
       <div className={styles.topBar}>
-        <BackToMapButton iconColor="var(--accent)" />
-        <div className={styles.title}>{t.mathTitle}</div>
+        <button className={styles.backToTopics} onClick={backToTopics}>
+          <svg width="18" height="18" viewBox="0 0 24 24">
+            <path
+              d="M15 5l-7 7 7 7"
+              stroke="var(--accent)"
+              strokeWidth="2.6"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          {t.topics}
+        </button>
+        <div className={styles.title}>{titleFor(problem, t)}</div>
         <div className={styles.starsPill}>
           <StarIcon size={26} />
           <span className={styles.starsValue}>{stars}</span>
         </div>
       </div>
 
-      {/* Ecuación (con manzanas solo si son pocas) */}
+      {/* Ecuación (con apoyo visual según la operación) */}
       <div className={styles.equationArea}>
+        {isMultiplication && <GroupsVisual a={problem.a} b={problem.b} />}
+        {isDivision && <SharingVisual a={problem.a} b={problem.b} />}
+
         <div className={styles.equation}>
           <div className={styles.operandCard}>
             {showApples && (
@@ -224,7 +390,7 @@ export function MathScreen() {
           const optStyle: React.CSSProperties = {
             background: optionColors[i % 3],
             cursor: solved ? 'default' : 'pointer',
-            fontSize: `${46 * scale}px`,
+            fontSize: `calc(clamp(28px, 8vw, 46px) * ${scale})`,
           };
           if (isCorrect) {
             optStyle.boxShadow = '0 0 0 5px #2FAE7A, 0 8px 0 rgba(0,0,0,0.10)';

@@ -33,11 +33,18 @@ const TIERS: { max: number; options: number }[] = [
   { max: 4999, options: 4 }, // L11 · sumas de 4 dígitos
 ];
 
-/** Devuelve el rango de números recomendado para un nivel dado. */
-export function rangeForLevel(level: number): LevelRange {
+/**
+ * Devuelve el rango de números recomendado para un nivel dado.
+ * @param maxOperandCap Techo opcional (p. ej. el del grado escolar):
+ *   la curva sube con el nivel pero nunca lo sobrepasa.
+ */
+export function rangeForLevel(
+  level: number,
+  maxOperandCap = Infinity,
+): LevelRange {
   const idx = Math.min(Math.max(level, 1), TIERS.length) - 1;
   const tier = TIERS[idx];
-  const maxOperand = tier.max;
+  const maxOperand = Math.max(2, Math.min(tier.max, maxOperandCap));
   // El mínimo crece con el nivel para que no aparezcan números
   // demasiado pequeños en niveles altos (nada de 2 + 3 en nivel 10).
   const minOperand = Math.max(1, Math.floor(maxOperand / 5));

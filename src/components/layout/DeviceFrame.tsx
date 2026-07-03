@@ -4,12 +4,13 @@ import { useApp } from '../../state/useApp';
 import { paletteToCssVars } from '../../theme/palettes';
 
 /**
- * Marco de tablet que envuelve la pantalla activa. Aplica las
- * variables CSS del theme (paleta + fuente) sobre el lienzo para
- * que toda la UI hija las herede vía var(--...).
+ * Lienzo de la app a pantalla completa. Aplica las variables CSS del
+ * theme (paleta + fuente) para que toda la UI hija las herede vía
+ * var(--...). (Antes dibujaba un marco de tablet en desktop; se
+ * eliminó para aprovechar toda la pantalla.)
  */
 export function DeviceFrame({ children }: { children: ReactNode }) {
-  const { palette, headingFontFamily, t } = useApp();
+  const { palette, headingFontFamily } = useApp();
 
   const themeVars = {
     ...paletteToCssVars(palette),
@@ -17,17 +18,8 @@ export function DeviceFrame({ children }: { children: ReactNode }) {
   } as React.CSSProperties;
 
   return (
-    <div className={styles.stage}>
-      <div className={styles.column}>
-        <div className={styles.bezel}>
-          <div className={styles.speakerLeft} />
-          <div className={styles.speakerRight} />
-          <div className={styles.screen} style={themeVars}>
-            <div className={styles.canvas}>{children}</div>
-          </div>
-        </div>
-        <div className={styles.caption}>{t.subtitle}</div>
-      </div>
+    <div className={styles.screen} style={themeVars}>
+      <div className={styles.canvas}>{children}</div>
     </div>
   );
 }

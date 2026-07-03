@@ -1,8 +1,9 @@
-# Aventura Matemática 🏝️
+# Profesor Banana 🍌
 
-App para que los niños aprendan **matemáticas** y **lectura** jugando.
-Reescrita en React + TypeScript a partir del prototipo original
-(`Aventura Matematica.dc.html`).
+App para que los niños aprendan **matemáticas**, **lectura** e **inglés**
+jugando, de la mano del Profesor Banana. React + TypeScript + Vite, instalable como PWA (funciona sin
+internet) y con cuentas opcionales en Firebase para guardar el progreso
+de varios niños en la nube.
 
 ## Scripts
 
@@ -13,6 +14,47 @@ npm run build    # compilar para producción
 npm run preview  # previsualizar el build
 npm test         # tests (Vitest)
 ```
+
+## Cuentas y nube (Firebase) ☁️
+
+Sin configurar nada, la app funciona en **modo local**: el progreso se
+guarda en el dispositivo. Para activar cuentas (registro/login) y la
+sincronización en la nube:
+
+1. Crea un proyecto en <https://console.firebase.google.com> (gratis).
+2. **Authentication → Sign-in method**: activa *Email/Password* y *Google*.
+3. **Firestore Database**: créala en modo producción y publica las reglas
+   de `firestore.rules` (Firestore → Reglas → pegar → Publicar).
+4. **Configuración del proyecto → Tus apps → Web**: registra una app web
+   y copia la configuración.
+5. Copia `.env.example` a `.env.local` y pega ahí esos valores.
+6. `npm run dev` — ahora verás la pantalla de login al abrir.
+
+### Desplegar en Firebase Hosting
+
+```bash
+npm install -g firebase-tools
+firebase login
+firebase use --add        # elige tu proyecto
+npm run build
+firebase deploy           # sube dist/ + reglas de Firestore
+```
+
+### Cómo funciona la sincronización
+
+- El padre/madre se registra; cada niño tiene su **perfil** (avatar,
+  nombre, grado) con su propio progreso.
+- Los datos viven en `users/{uid}/children/{perfil}` en Firestore y
+  siempre también en `localStorage` (la app funciona offline y sube los
+  cambios al reconectar; gana la copia más reciente).
+- "Jugar sin cuenta" usa solo el dispositivo; al crear cuenta después,
+  los perfiles locales se suben solos.
+
+## PWA 📱
+
+La app es instalable ("Añadir a pantalla de inicio") y precachea todo lo
+necesario para jugar sin internet (`vite-plugin-pwa`, ver
+`vite.config.ts`).
 
 ## Estructura
 

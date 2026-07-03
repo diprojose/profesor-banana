@@ -30,4 +30,14 @@ describe('rangeForLevel', () => {
     const beyond = rangeForLevel(maxDifficultyLevel + 10);
     expect(beyond).toEqual(top);
   });
+
+  it('el techo del grado acota la curva sin importar el nivel', () => {
+    for (let lvl = 1; lvl <= maxDifficultyLevel + 3; lvl++) {
+      const r = rangeForLevel(lvl, 50);
+      expect(r.maxOperand).toBeLessThanOrEqual(50);
+      expect(r.minOperand).toBeLessThan(r.maxOperand);
+    }
+    // Con techo no cambia nada por debajo de él.
+    expect(rangeForLevel(1, 50)).toEqual(rangeForLevel(1));
+  });
 });

@@ -15,7 +15,9 @@ export function AchievementsScreen() {
   const stats = [
     { value: progress.mathSolved, label: t.statsMath },
     { value: progress.pagesRead, label: t.statsReading },
-    { value: progress.englishLearned, label: t.statsEnglish },
+    { value: progress.completedStories.length, label: t.statsStories },
+    { value: progress.englishWordIds.length, label: t.statsEnglish },
+    { value: progress.frenchWordIds.length, label: t.statsFrench },
     { value: progress.bestStreak, label: t.statsStreak },
     { value: progress.stars, label: t.statsStars },
   ];

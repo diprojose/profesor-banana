@@ -72,9 +72,27 @@ export const medals: MedalDef[] = [
     },
   },
   {
+    id: 'story-1',
+    emoji: '🧚',
+    isUnlocked: (p) => p.completedStories.length >= 1,
+    text: {
+      es: { name: 'Fin del cuento', desc: 'Termina tu primer cuento' },
+      en: { name: 'The end', desc: 'Finish your first story' },
+    },
+  },
+  {
+    id: 'stories-5',
+    emoji: '🏰',
+    isUnlocked: (p) => p.completedStories.length >= 5,
+    text: {
+      es: { name: 'Cuentacuentos', desc: 'Termina 5 cuentos' },
+      en: { name: 'Storyteller', desc: 'Finish 5 stories' },
+    },
+  },
+  {
     id: 'english-5',
     emoji: '🗣️',
-    isUnlocked: (p) => p.englishLearned >= 5,
+    isUnlocked: (p) => p.englishWordIds.length >= 5,
     text: {
       es: { name: 'Hello!', desc: 'Aprende 5 palabras en inglés' },
       en: { name: 'Hello!', desc: 'Learn 5 English words' },
@@ -83,10 +101,37 @@ export const medals: MedalDef[] = [
   {
     id: 'english-15',
     emoji: '🌎',
-    isUnlocked: (p) => p.englishLearned >= 15,
+    isUnlocked: (p) => p.englishWordIds.length >= 15,
     text: {
       es: { name: 'Pequeño políglota', desc: 'Aprende 15 palabras en inglés' },
       en: { name: 'Little polyglot', desc: 'Learn 15 English words' },
+    },
+  },
+  {
+    id: 'english-40',
+    emoji: '🎓',
+    isUnlocked: (p) => p.englishWordIds.length >= 40,
+    text: {
+      es: { name: 'Gran políglota', desc: 'Aprende 40 palabras en inglés' },
+      en: { name: 'Great polyglot', desc: 'Learn 40 English words' },
+    },
+  },
+  {
+    id: 'french-5',
+    emoji: '🥐',
+    isUnlocked: (p) => p.frenchWordIds.length >= 5,
+    text: {
+      es: { name: 'Bonjour !', desc: 'Aprende 5 palabras en francés' },
+      en: { name: 'Bonjour!', desc: 'Learn 5 French words' },
+    },
+  },
+  {
+    id: 'french-15',
+    emoji: '🗼',
+    isUnlocked: (p) => p.frenchWordIds.length >= 15,
+    text: {
+      es: { name: 'Petit chef', desc: 'Aprende 15 palabras en francés' },
+      en: { name: 'Petit chef', desc: 'Learn 15 French words' },
     },
   },
   {

@@ -10,16 +10,19 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 26px;
+  gap: 10px;
+  padding: clamp(10px, 2.5vw, 18px) clamp(14px, 3vw, 26px);
   z-index: 5;
 }
 
 .title {
   font-family: var(--head);
-  font-size: 26px;
+  font-size: clamp(15px, 3.6vw, 26px);
   font-weight: 800;
   color: var(--ink);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .starsPill {
@@ -30,11 +33,12 @@
   border-radius: 30px;
   padding: 9px 18px 9px 13px;
   box-shadow: 0 6px 14px rgba(50, 80, 110, 0.14);
+  flex-shrink: 0;
 }
 
 .starsValue {
   font-family: var(--head);
-  font-size: 22px;
+  font-size: clamp(18px, 3.5vw, 22px);
   font-weight: 800;
   color: var(--ink);
 }
@@ -45,15 +49,28 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 22px;
-  padding: 0 30px 10px;
+  gap: clamp(12px, 2.5vh, 22px);
+  padding: 0 clamp(14px, 3vw, 30px) 10px;
 }
 
-/* Tarjeta con el dibujo (emoji) */
+.categoryChip {
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-family: var(--head);
+  font-size: clamp(13px, 3vw, 15px);
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 12px rgba(50, 80, 110, 0.1);
+}
+
+/* Tarjeta con el dibujo (emoji) o la palabra grande */
 .pictureCard {
   background: #fff;
   border-radius: 36px;
-  padding: 24px 40px;
+  padding: clamp(16px, 3vw, 24px) clamp(24px, 6vw, 40px);
   box-shadow: 0 16px 34px rgba(50, 80, 110, 0.14);
   display: flex;
   flex-direction: column;
@@ -62,9 +79,18 @@
 }
 
 .emoji {
-  font-size: 128px;
+  font-size: clamp(72px, 18vw, 128px);
   line-height: 1;
   animation: bob 3s ease-in-out infinite;
+}
+
+.bigWord {
+  font-family: var(--head);
+  font-size: clamp(38px, 10vw, 64px);
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: lowercase;
+  line-height: 1.1;
 }
 
 .hearButton {
@@ -78,9 +104,30 @@
   background: var(--accent);
   color: #fff;
   font-family: var(--head);
-  font-size: 18px;
+  font-size: clamp(15px, 3.5vw, 18px);
   font-weight: 800;
   box-shadow: 0 6px 0 rgba(0, 0, 0, 0.12);
+}
+
+/* Botón grande de escucha (modo "oye y elige el dibujo") */
+.bigHearButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  width: clamp(130px, 30vw, 180px);
+  height: clamp(130px, 30vw, 180px);
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--head);
+  font-size: clamp(16px, 3.5vw, 20px);
+  font-weight: 800;
+  box-shadow: 0 10px 0 rgba(0, 0, 0, 0.12);
+  justify-content: center;
+  animation: bob 3s ease-in-out infinite;
 }
 
 .hearButtonActive {
@@ -101,32 +148,63 @@
   gap: 8px;
   color: var(--coralInk);
   font-weight: 800;
-  font-size: 19px;
+  font-size: clamp(16px, 3.5vw, 19px);
 }
 
-/* Opciones de palabra */
+/* Opciones de palabra (texto en inglés) */
 .options {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  gap: 18px;
-  padding: 0 30px 26px;
+  gap: clamp(10px, 2.5vw, 18px);
+  padding: 0 clamp(14px, 3vw, 30px) clamp(16px, 3vh, 26px);
 }
 
 .optionButton {
   position: relative;
-  min-width: 180px;
+  min-width: clamp(130px, 40vw, 180px);
   border: none;
   border-radius: 26px;
-  padding: 20px 26px;
+  padding: clamp(14px, 3vw, 20px) clamp(18px, 4vw, 26px);
   color: var(--ink);
   font-family: var(--head);
-  font-size: 30px;
+  font-size: clamp(20px, 5vw, 30px);
   font-weight: 800;
   box-shadow: 0 8px 0 rgba(0, 0, 0, 0.1);
   transition: transform 0.15s;
   cursor: pointer;
   text-transform: lowercase;
+}
+
+/* Opciones de dibujo (emoji) */
+.optionsPictures {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 150px));
+  justify-content: center;
+  gap: clamp(10px, 2.5vw, 18px);
+  padding: 0 clamp(14px, 3vw, 30px) clamp(16px, 3vh, 26px);
+}
+
+.pictureOption {
+  position: relative;
+  border: none;
+  border-radius: 26px;
+  padding: clamp(12px, 3vw, 20px);
+  font-size: clamp(48px, 12vw, 72px);
+  line-height: 1;
+  box-shadow: 0 8px 0 rgba(0, 0, 0, 0.1);
+  transition: transform 0.15s;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+}
+
+@media (max-width: 560px) {
+  .optionsPictures {
+    grid-template-columns: repeat(2, minmax(0, 150px));
+  }
 }
 
 .optionMark {
@@ -154,29 +232,31 @@
   justify-content: center;
   background: rgba(40, 60, 75, 0.28);
   z-index: 20;
+  padding: 16px;
 }
 
 .celebrateCard {
   background: #fff;
   border-radius: 36px;
-  padding: 30px 44px;
+  padding: clamp(22px, 4vw, 30px) clamp(24px, 6vw, 44px);
   box-shadow: 0 24px 60px rgba(30, 50, 70, 0.3);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
   animation: pop 0.4s ease both;
+  max-width: min(92vw, 440px);
 }
 
 .celebrateEmoji {
-  font-size: 96px;
+  font-size: clamp(72px, 16vw, 96px);
   line-height: 1;
   animation: bob 2.2s ease-in-out infinite;
 }
 
 .celebrateWord {
   font-family: var(--head);
-  font-size: 34px;
+  font-size: clamp(26px, 6vw, 34px);
   font-weight: 800;
   color: var(--accent);
   text-transform: lowercase;
@@ -191,6 +271,8 @@
 
 .celebrateButtons {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 12px;
   margin-top: 6px;
 }
@@ -206,7 +288,7 @@
   border-radius: 26px;
   padding: 14px 30px;
   font-family: var(--head);
-  font-size: 20px;
+  font-size: clamp(17px, 4vw, 20px);
   font-weight: 800;
   box-shadow: 0 7px 0 rgba(0, 0, 0, 0.14);
 }
@@ -222,7 +304,7 @@
   border-radius: 26px;
   padding: 14px 24px;
   font-family: var(--head);
-  font-size: 20px;
+  font-size: clamp(17px, 4vw, 20px);
   font-weight: 800;
   box-shadow: 0 7px 0 rgba(0, 0, 0, 0.1);
 }

@@ -78,6 +78,51 @@ describe('generateProblem', () => {
     expect(problemSignature(ab)).toBe(problemSignature(ba));
   });
 
+  it('multiplicación: factores dentro de la tabla y respuesta correcta', () => {
+    const rng = seededRandom(21);
+    const mulConfig: GeneratorConfig = {
+      ...additionConfig,
+      operations: ['multiplication'],
+      maxTable: 5,
+    };
+    for (let i = 0; i < 500; i++) {
+      const p = generateProblem(mulConfig, rng);
+      expect(p.operation).toBe('multiplication');
+      expect(p.a * p.b).toBe(p.answer);
+      expect(p.a).toBeGreaterThanOrEqual(1);
+      expect(p.a).toBeLessThanOrEqual(5); // dentro de la tabla
+      expect(p.b).toBeGreaterThanOrEqual(1);
+      expect(p.b).toBeLessThanOrEqual(10);
+      expect(p.options).toContain(p.answer);
+    }
+  });
+
+  it('división: siempre exacta, sin restos', () => {
+    const rng = seededRandom(33);
+    const divConfig: GeneratorConfig = {
+      ...additionConfig,
+      operations: ['division'],
+      maxTable: 10,
+    };
+    for (let i = 0; i < 500; i++) {
+      const p = generateProblem(divConfig, rng);
+      expect(p.operation).toBe('division');
+      expect(p.a % p.b).toBe(0); // exacta
+      expect(p.a / p.b).toBe(p.answer);
+      expect(p.b).toBeGreaterThanOrEqual(2);
+      expect(p.b).toBeLessThanOrEqual(10);
+      expect(p.answer).toBeGreaterThanOrEqual(1);
+      expect(p.answer).toBeLessThanOrEqual(10);
+    }
+  });
+
+  it('la multiplicación es conmutativa en la firma (3×4 == 4×3)', () => {
+    const x = generateProblem(additionConfig, seededRandom(1));
+    const ab = { ...x, a: 3, b: 4, operation: 'multiplication' as const, answer: 12 };
+    const ba = { ...x, a: 4, b: 3, operation: 'multiplication' as const, answer: 12 };
+    expect(problemSignature(ab)).toBe(problemSignature(ba));
+  });
+
   it('generateDistinctProblem no repite firmas recientes cuando hay margen', () => {
     const rng = seededRandom(5);
     const recent: string[] = [];

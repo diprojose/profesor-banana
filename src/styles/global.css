@@ -22,10 +22,14 @@ body {
   font-family: 'Nunito', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Sin flash azul al tocar botones en móvil. */
+  -webkit-tap-highlight-color: transparent;
 }
 
 button {
   font-family: inherit;
+  /* Respuesta táctil inmediata (sin esperar el doble tap de zoom). */
+  touch-action: manipulation;
 }
 
 /* ---- Animaciones (keyframes) ---- */

@@ -2,17 +2,31 @@ import { createContext } from 'react';
 import { type Lang, type Strings } from '../i18n/strings';
 import { type PaletteName, type Palette } from '../theme/palettes';
 import { type HeadingFontName } from '../theme/fonts';
-import { type Operation, type GeneratorConfig } from '../game/types';
+import { type GeneratorConfig } from '../game/types';
+import { type Grade, type MathTopic } from '../game/grades';
 import { type Progress } from '../progress/progress';
 import { type LevelInfo } from '../progress/levels';
+import { type StoredProfile } from './profiles';
 
 export type Screen =
   | 'home'
   | 'math'
   | 'reading'
   | 'english'
+  | 'french'
   | 'settings'
-  | 'achievements';
+  | 'achievements'
+  | 'profiles'
+  | 'onboarding';
+
+/**
+ * Estado de la sesión del padre/madre:
+ * - 'loading': esperando saber si hay sesión guardada.
+ * - 'signedOut': hay cuentas activadas pero nadie ha entrado.
+ * - 'guest': jugando sin cuenta (solo datos locales).
+ * - 'signedIn': cuenta activa; los perfiles se sincronizan a la nube.
+ */
+export type AuthStatus = 'loading' | 'signedOut' | 'guest' | 'signedIn';
 
 /** Recompensa pendiente de celebrar (subida de nivel o medalla nueva). */
 export type Reward =
@@ -30,8 +44,6 @@ export type DifficultyMode = 'auto' | 'manual';
 export interface MathSettings {
   /** Modo de dificultad. */
   mode: DifficultyMode;
-  /** Operaciones activas; debe haber al menos una. */
-  operations: Operation[];
   /** Número más grande que puede aparecer como operando. */
   maxOperand: number;
   /** Resultado máximo permitido. */
@@ -53,6 +65,8 @@ export interface SpeechSettings {
 /** Todos los ajustes personalizables por el usuario. */
 export interface Settings {
   childName: string;
+  /** Grado escolar: define qué operaciones y números ve el niño. */
+  grade: Grade;
   palette: PaletteName;
   headingFont: HeadingFontName;
   math: MathSettings;
@@ -63,6 +77,25 @@ export interface AppContextValue {
   // Navegación
   screen: Screen;
   goTo: (screen: Screen) => void;
+
+  // Sesión y cuentas
+  authStatus: AuthStatus;
+  userEmail: string | null;
+  /** ¿Firebase está configurado? (si no, todo es modo local). */
+  accountsEnabled: boolean;
+  loginEmail: (email: string, password: string) => Promise<void>;
+  registerEmail: (email: string, password: string) => Promise<void>;
+  loginGoogle: () => Promise<void>;
+  signOutAccount: () => Promise<void>;
+  playAsGuest: () => void;
+  /** Sale del modo invitado para ir a la pantalla de cuenta. */
+  goToAuth: () => void;
+
+  // Perfiles de niño
+  profiles: StoredProfile[];
+  activeProfileId: string | null;
+  selectProfile: (id: string) => void;
+  createChildProfile: (name: string, avatar: string, grade: Grade) => void;
 
   // Idioma
   lang: Lang;
@@ -77,10 +110,14 @@ export interface AppContextValue {
   recordCorrectAnswer: () => void;
   /** Fallo en matemáticas (corta la racha). */
   recordWrongAnswer: () => void;
-  /** Página leída en voz alta (+1 estrella). */
-  recordPageRead: () => void;
-  /** Palabra de inglés acertada (+1 estrella). */
-  recordEnglishCorrect: () => void;
+  /** Página leída en voz alta (+1 estrella la primera vez). */
+  recordPageRead: (storyId: string, page: number) => void;
+  /** Cuento terminado: pregunta final respondida bien (+2 estrellas). */
+  recordStoryCompleted: (storyId: string) => void;
+  /** Palabra de inglés acertada (+1 estrella, cuenta palabras distintas). */
+  recordEnglishCorrect: (wordId: string) => void;
+  /** Palabra de francés acertada (+1 estrella, cuenta palabras distintas). */
+  recordFrenchCorrect: (wordId: string) => void;
   resetProgress: () => void;
 
   // Recompensas por celebrar (cola)
@@ -93,8 +130,8 @@ export interface AppContextValue {
   updateMath: (patch: Partial<MathSettings>) => void;
   updateSpeech: (patch: Partial<SpeechSettings>) => void;
   resetSettings: () => void;
-  /** Config lista para pasar al generador de problemas. */
-  mathConfig: GeneratorConfig;
+  /** Config lista para el generador según el tema elegido en la isla. */
+  mathConfigFor: (topic: MathTopic) => GeneratorConfig;
   palette: Palette;
   headingFontFamily: string;
 }

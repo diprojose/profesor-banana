@@ -10,14 +10,16 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 26px;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: clamp(10px, 2.5vw, 18px) clamp(14px, 3vw, 26px);
   z-index: 5;
   flex-shrink: 0;
 }
 
 .title {
   font-family: var(--head);
-  font-size: 26px;
+  font-size: clamp(18px, 4vw, 26px);
   font-weight: 800;
   color: var(--ink);
 }
@@ -53,12 +55,23 @@
 .levelCard {
   background: linear-gradient(150deg, var(--accent), var(--coralInk));
   border-radius: 28px;
-  padding: 24px 28px;
+  padding: clamp(18px, 3.5vw, 24px) clamp(18px, 4vw, 28px);
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: clamp(16px, 3vw, 24px);
   box-shadow: 0 14px 30px rgba(50, 80, 110, 0.2);
   color: #fff;
+}
+
+@media (max-width: 480px) {
+  .levelCard {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .levelInfo {
+    width: 100%;
+  }
 }
 
 .levelBadge {
@@ -119,7 +132,7 @@
 /* ---- Estadísticas ---- */
 .stats {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(min(110px, 100%), 1fr));
   gap: 12px;
 }
 
@@ -173,8 +186,8 @@
 
 .medalGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(auto-fit, minmax(min(145px, 100%), 1fr));
+  gap: clamp(10px, 2vw, 14px);
 }
 
 .medal {

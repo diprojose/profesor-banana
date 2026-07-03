@@ -1,90 +1,19 @@
 /**
- * Escenografía SVG: el fondo del mapa, las islas (Números y
- * Palabras) y la ilustración del cuento. Portado del prototipo.
+ * Escenografía SVG: las islas del mapa y la ilustración del cuento.
  * Usa variables CSS del theme (var(--mint), etc.).
  */
 
-/** Fondo del mapa con sol, nubes, sendero y banderita. */
-export function MapScenery() {
-  return (
-    <svg
-      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
-      viewBox="0 0 1024 600"
-      preserveAspectRatio="xMidYMid slice"
-    >
-      <path
-        d="M0 300 Q 256 268 512 300 T 1024 300 L1024 600 L0 600 Z"
-        fill="var(--bg2)"
-        opacity="0.55"
-      />
-      <path
-        d="M0 350 Q 256 320 512 350 T 1024 350 L1024 600 L0 600 Z"
-        fill="var(--bg2)"
-      />
-      <g opacity="0.85">
-        <circle cx="930" cy="80" r="44" fill="var(--yellow)" />
-        <g stroke="var(--yellow)" strokeWidth="7" strokeLinecap="round">
-          <line x1="930" y1="14" x2="930" y2="2" />
-          <line x1="990" y1="80" x2="1010" y2="80" />
-          <line x1="884" y1="34" x2="872" y2="22" />
-          <line x1="976" y1="34" x2="988" y2="22" />
-          <line x1="884" y1="126" x2="872" y2="138" />
-        </g>
-      </g>
-      <g fill="#ffffff" opacity="0.9">
-        <ellipse cx="180" cy="90" rx="46" ry="22" />
-        <ellipse cx="220" cy="78" rx="34" ry="20" />
-        <ellipse cx="610" cy="60" rx="40" ry="19" />
-        <ellipse cx="650" cy="72" rx="30" ry="16" />
-      </g>
-      <path
-        d="M408 432 C 478 422 496 332 600 314 C 660 304 690 286 728 262"
-        stroke="#ffffff"
-        strokeWidth="11"
-        strokeLinecap="round"
-        strokeDasharray="0.5 28"
-        fill="none"
-        opacity="0.95"
-      />
-      <g>
-        <circle cx="470" cy="398" r="15" fill="#fff" stroke="var(--mint)" strokeWidth="5" />
-        <path
-          d="M463 398 l5 5 9 -10"
-          stroke="var(--accent)"
-          strokeWidth="4"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="560" cy="345" r="15" fill="#fff" stroke="var(--mint)" strokeWidth="5" />
-        <path
-          d="M553 345 l5 5 9 -10"
-          stroke="var(--accent)"
-          strokeWidth="4"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-        <circle cx="648" cy="305" r="14" fill="#EFE3CF" stroke="#fff" strokeWidth="4" />
-        <path
-          d="M648 300 a4 4 0 0 1 4 4 v3 h-8 v-3 a4 4 0 0 1 4 -4z M644 307 h8 v6 h-8z"
-          fill="#C9A06A"
-        />
-      </g>
-      <g transform="translate(404 416)">
-        <path d="M-26 0 Q 0 22 26 0 Z" fill="#E98C73" />
-        <rect x="-2" y="-30" width="4" height="30" fill="#9C6B45" />
-        <path d="M2 -30 L2 -6 L26 -16 Z" fill="#fff" />
-        <path d="M2 -30 L2 -6 L26 -16 Z" fill="var(--coral)" opacity="0.55" />
-      </g>
-    </svg>
-  );
-}
+/** Ancho fluido: la isla llena su contenedor manteniendo proporción. */
+const islandSvgStyle: React.CSSProperties = {
+  width: '100%',
+  height: 'auto',
+  display: 'block',
+};
 
 /** Isla de los Números (botón del mapa). */
 export function MathIslandArt() {
   return (
-    <svg width="252" height="168" viewBox="0 0 240 168">
+    <svg style={islandSvgStyle} viewBox="0 0 240 168">
       <ellipse cx="120" cy="150" rx="112" ry="16" fill="#fff" opacity="0.35" />
       <ellipse cx="120" cy="130" rx="98" ry="24" fill="#F3DCA6" />
       <path
@@ -127,7 +56,7 @@ export function MathIslandArt() {
 /** Isla de las Palabras (botón del mapa). */
 export function WordIslandArt() {
   return (
-    <svg width="252" height="168" viewBox="0 0 240 168">
+    <svg style={islandSvgStyle} viewBox="0 0 240 168">
       <ellipse cx="120" cy="150" rx="112" ry="16" fill="#fff" opacity="0.35" />
       <ellipse cx="120" cy="130" rx="98" ry="24" fill="#F3DCA6" />
       <path
@@ -172,7 +101,7 @@ export function WordIslandArt() {
 /** Isla del Inglés (botón del mapa): isla con un globo "Hi!". */
 export function EnglishIslandArt() {
   return (
-    <svg width="252" height="168" viewBox="0 0 240 168">
+    <svg style={islandSvgStyle} viewBox="0 0 240 168">
       <ellipse cx="120" cy="150" rx="112" ry="16" fill="#fff" opacity="0.35" />
       <ellipse cx="120" cy="130" rx="98" ry="24" fill="#F3DCA6" />
       <path
@@ -208,6 +137,53 @@ export function EnglishIslandArt() {
           fill="var(--coralInk)"
         >
           Hi!
+        </text>
+      </g>
+    </svg>
+  );
+}
+
+/** Isla del Francés (botón del mapa): torre Eiffel y globo "Oui!". */
+export function FrenchIslandArt() {
+  return (
+    <svg style={islandSvgStyle} viewBox="0 0 240 168">
+      <ellipse cx="120" cy="150" rx="112" ry="16" fill="#fff" opacity="0.35" />
+      <ellipse cx="120" cy="130" rx="98" ry="24" fill="#F3DCA6" />
+      <path
+        d="M26 124 Q 120 90 214 124 Q 180 110 120 108 Q 60 110 26 124 Z"
+        fill="var(--mint)"
+      />
+      {/* Torre Eiffel simplificada */}
+      <g fill="#7A6A8A" stroke="#7A6A8A">
+        <path
+          d="M96 118 L106 118 Q 108 88 111 70 L115 70 Q 118 88 120 118 L130 118 L124 108 Q 116 92 115 62 L111 62 Q 110 92 102 108 Z"
+          strokeWidth="2"
+          strokeLinejoin="round"
+        />
+        <rect x="107" y="52" width="12" height="12" rx="2" />
+        <rect x="111" y="42" width="4" height="12" rx="1.5" />
+        <line x1="100" y1="104" x2="126" y2="104" strokeWidth="4" strokeLinecap="round" />
+        <line x1="104" y1="86" x2="122" y2="86" strokeWidth="3.4" strokeLinecap="round" />
+      </g>
+      <circle cx="113" cy="40" r="3" fill="var(--coral)" />
+      {/* Globo "Oui!" */}
+      <g transform="translate(146 34)">
+        <path
+          d="M2 6 Q2 0 8 0 H46 Q52 0 52 6 V26 Q52 32 46 32 H22 L12 42 L14 32 H8 Q2 32 2 26 Z"
+          fill="#fff"
+          stroke="var(--coral)"
+          strokeWidth="3"
+        />
+        <text
+          x="27"
+          y="23"
+          textAnchor="middle"
+          fontFamily="var(--head)"
+          fontSize="18"
+          fontWeight="800"
+          fill="var(--coralInk)"
+        >
+          Oui!
         </text>
       </g>
     </svg>

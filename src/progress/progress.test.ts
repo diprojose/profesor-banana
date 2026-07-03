@@ -23,9 +23,52 @@ describe('progressReducer', () => {
   });
 
   it('leer una página suma estrella y cuenta páginas', () => {
-    const s = progressReducer(initialProgress, { type: 'page-read' });
+    const s = progressReducer(initialProgress, {
+      type: 'page-read',
+      pageKey: 'boat:0',
+    });
     expect(s.stars).toBe(1);
     expect(s.pagesRead).toBe(1);
+    expect(s.readPages).toContain('boat:0');
+  });
+
+  it('releer la misma página no vuelve a premiar', () => {
+    let s: Progress = initialProgress;
+    s = progressReducer(s, { type: 'page-read', pageKey: 'boat:0' });
+    s = progressReducer(s, { type: 'page-read', pageKey: 'boat:0' });
+    s = progressReducer(s, { type: 'page-read', pageKey: 'boat:1' });
+    expect(s.stars).toBe(2);
+    expect(s.pagesRead).toBe(2);
+  });
+
+  it('terminar un cuento da 2 estrellas y solo cuenta una vez', () => {
+    let s: Progress = initialProgress;
+    s = progressReducer(s, { type: 'story-completed', storyId: 'boat' });
+    expect(s.stars).toBe(2);
+    expect(s.completedStories).toEqual(['boat']);
+    expect(s.unlockedMedals).toContain('story-1');
+    s = progressReducer(s, { type: 'story-completed', storyId: 'boat' });
+    expect(s.stars).toBe(2); // sin doble premio
+  });
+
+  it('francés cuenta palabras distintas, igual que inglés', () => {
+    let s: Progress = initialProgress;
+    s = progressReducer(s, { type: 'french-correct', wordId: 'fr-cat' });
+    s = progressReducer(s, { type: 'french-correct', wordId: 'fr-cat' });
+    s = progressReducer(s, { type: 'french-correct', wordId: 'fr-dog' });
+    expect(s.stars).toBe(3);
+    expect(s.frenchLearned).toBe(3);
+    expect(s.frenchWordIds).toEqual(['fr-cat', 'fr-dog']);
+  });
+
+  it('inglés cuenta palabras distintas, sin duplicar repetidas', () => {
+    let s: Progress = initialProgress;
+    s = progressReducer(s, { type: 'english-correct', wordId: 'cat' });
+    s = progressReducer(s, { type: 'english-correct', wordId: 'dog' });
+    s = progressReducer(s, { type: 'english-correct', wordId: 'cat' });
+    expect(s.stars).toBe(3); // cada acierto premia
+    expect(s.englishLearned).toBe(3);
+    expect(s.englishWordIds).toEqual(['cat', 'dog']); // distintas: 2
   });
 
   it('desbloquea la medalla de racha al llegar a 5 seguidos', () => {

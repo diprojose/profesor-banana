@@ -42,6 +42,30 @@ export function getHints(problem: MathProblem, lang: Lang): string[] {
         ];
   }
 
+  if (operation === 'multiplication') {
+    return es
+      ? [
+          `${a} × ${b} son ${a} grupos de ${b}. Puedes sumar: ${repeatSum(b, a)}.`,
+          `Cuenta de ${b} en ${b}, ${a} veces: ${skipCount(b, a)}.`,
+        ]
+      : [
+          `${a} × ${b} means ${a} groups of ${b}. You can add: ${repeatSum(b, a)}.`,
+          `Count by ${b}s, ${a} times: ${skipCount(b, a)}.`,
+        ];
+  }
+
+  if (operation === 'division') {
+    return es
+      ? [
+          `${a} ÷ ${b} es repartir ${a} en ${b} grupos iguales.`,
+          `Piensa al revés: ¿${b} por cuánto da ${a}?`,
+        ]
+      : [
+          `${a} ÷ ${b} means sharing ${a} into ${b} equal groups.`,
+          `Think backwards: ${b} times what makes ${a}?`,
+        ];
+  }
+
   // Resta
   if (a <= COUNTING_LIMIT) {
     return es
@@ -77,4 +101,18 @@ function countDown(from: number, steps: number): string {
   const seq: number[] = [];
   for (let i = 1; i <= Math.min(steps, 6); i++) seq.push(from - i);
   return seq.join(', ');
+}
+
+/** Suma repetida "4 + 4 + 4" (acotada para no hacer pistas eternas). */
+function repeatSum(value: number, times: number): string {
+  const shown = Math.min(times, 5);
+  const parts = Array.from({ length: shown }, () => String(value));
+  return parts.join(' + ') + (times > shown ? ' + ...' : '');
+}
+
+/** Conteo saltado "4, 8, 12" (acotado). */
+function skipCount(step: number, times: number): string {
+  const seq: number[] = [];
+  for (let i = 1; i <= Math.min(times, 5); i++) seq.push(step * i);
+  return seq.join(', ') + (times > 5 ? ', ...' : '');
 }

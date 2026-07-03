@@ -1,5 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
-import { type Lang } from '../i18n/strings';
+
+/**
+ * Idiomas que puede pronunciar la app. La UI solo está en es/en,
+ * pero las islas de idiomas también pronuncian francés.
+ */
+export type SpeechLang = 'es' | 'en' | 'fr';
+
+const speechLocale: Record<SpeechLang, string> = {
+  es: 'es-ES',
+  en: 'en-US',
+  fr: 'fr-FR',
+};
 
 export interface SpeechOptions {
   /** Si está desactivado, speak() no hace nada. */
@@ -15,7 +26,7 @@ export interface SpeechOptions {
  * voz alta con una voz amable para niños. La velocidad y el tono son
  * configurables desde los ajustes.
  */
-export function useSpeech(lang: Lang, options: SpeechOptions = {}) {
+export function useSpeech(lang: SpeechLang, options: SpeechOptions = {}) {
   const { enabled = true, rate = 0.85, pitch = 1.12 } = options;
   const [speaking, setSpeaking] = useState(false);
 
@@ -33,7 +44,7 @@ export function useSpeech(lang: Lang, options: SpeechOptions = {}) {
       if (!supported || !enabled) return;
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = lang === 'en' ? 'en-US' : 'es-ES';
+      utterance.lang = speechLocale[lang];
       utterance.rate = rate;
       utterance.pitch = pitch;
       utterance.onend = () => setSpeaking(false);

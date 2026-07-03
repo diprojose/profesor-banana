@@ -10,14 +10,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 26px;
+  gap: 8px;
+  padding: clamp(10px, 2.5vw, 18px) clamp(14px, 3vw, 26px);
   z-index: 5;
   flex-shrink: 0;
 }
 
 .title {
   font-family: var(--head);
-  font-size: 26px;
+  font-size: clamp(18px, 4vw, 26px);
   font-weight: 800;
   color: var(--ink);
 }
@@ -44,9 +45,16 @@
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px;
+  gap: clamp(12px, 2.5vw, 18px);
   max-width: 920px;
   margin: 0 auto;
+}
+
+/* Una sola columna en pantallas estrechas. */
+@media (max-width: 700px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .card {
@@ -130,6 +138,19 @@
   height: 1px;
   background: rgba(50, 80, 110, 0.1);
   margin: 6px 0;
+}
+
+.accountButton {
+  border: none;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--accent);
+  border-radius: 18px;
+  padding: 11px 18px;
+  font-family: var(--head);
+  font-weight: 800;
+  font-size: 15px;
+  box-shadow: 0 5px 12px rgba(50, 80, 110, 0.12);
 }
 
 .note {
