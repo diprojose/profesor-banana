@@ -71,6 +71,31 @@ describe('progressReducer', () => {
     expect(s.englishWordIds).toEqual(['cat', 'dog']); // distintas: 2
   });
 
+  it('escribir bien una parte de dictado suma estrella una sola vez', () => {
+    let s: Progress = initialProgress;
+    s = progressReducer(s, { type: 'dictation-item', itemKey: 'home-words:0' });
+    s = progressReducer(s, { type: 'dictation-item', itemKey: 'home-words:0' });
+    s = progressReducer(s, { type: 'dictation-item', itemKey: 'home-words:1' });
+    expect(s.stars).toBe(2);
+    expect(s.dictationsWritten).toBe(2);
+    expect(s.dictationItems).toEqual(['home-words:0', 'home-words:1']);
+  });
+
+  it('terminar un dictado da 2 estrellas y solo cuenta una vez', () => {
+    let s: Progress = initialProgress;
+    s = progressReducer(s, {
+      type: 'dictation-completed',
+      dictationId: 'home-words',
+    });
+    expect(s.stars).toBe(2);
+    expect(s.completedDictations).toEqual(['home-words']);
+    s = progressReducer(s, {
+      type: 'dictation-completed',
+      dictationId: 'home-words',
+    });
+    expect(s.stars).toBe(2); // sin doble premio
+  });
+
   it('desbloquea la medalla de racha al llegar a 5 seguidos', () => {
     let s: Progress = initialProgress;
     for (let i = 0; i < 5; i++) {

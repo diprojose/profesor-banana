@@ -9,13 +9,17 @@ import {
   SpeakerIcon,
   StarIcon,
 } from '../icons/Icons';
-import { generateVocabQuestion, type VocabQuestion } from '../../language/vocabGenerator';
+import {
+  generateVocabQuestion,
+  updateSeenWords,
+  type VocabQuestion,
+} from '../../language/vocabGenerator';
 import { languageIslands, type LanguageIslandId } from '../../language/islands';
 import { type VocabWord } from '../../language/vocabulary';
 
 type Status = 'correct' | 'wrong' | null;
 
-/** Cuántas palabras recientes recordar para no repetirlas seguidas. */
+/** Al reiniciar el mazo, cuántas palabras recientes seguir evitando. */
 const RECENT_MEMORY = 8;
 
 /** Opciones por pregunta (la correcta + 3 distractores). */
@@ -42,10 +46,17 @@ export function LanguageScreen({ island }: { island: LanguageIslandId }) {
   const recordCorrect =
     island === 'french' ? recordFrenchCorrect : recordEnglishCorrect;
 
-  const recentRef = useRef<string[]>([]);
+  // "Mazo" de palabras vistas: no se repite ninguna hasta recorrer
+  // todo el vocabulario (feedback de los niños: se repetían mucho).
+  const seenRef = useRef<string[]>([]);
   const [question, setQuestion] = useState<VocabQuestion>(() => {
-    const q = generateVocabQuestion(config.vocab, OPTION_COUNT, recentRef.current);
-    recentRef.current = [q.item.id];
+    const q = generateVocabQuestion(config.vocab, OPTION_COUNT, seenRef.current);
+    seenRef.current = updateSeenWords(
+      seenRef.current,
+      q.item.id,
+      config.vocab.length,
+      RECENT_MEMORY,
+    );
     return q;
   });
   const [picked, setPicked] = useState<string | null>(null);
@@ -82,8 +93,13 @@ export function LanguageScreen({ island }: { island: LanguageIslandId }) {
   );
 
   const nextQuestion = useCallback(() => {
-    const q = generateVocabQuestion(config.vocab, OPTION_COUNT, recentRef.current);
-    recentRef.current = [q.item.id, ...recentRef.current].slice(0, RECENT_MEMORY);
+    const q = generateVocabQuestion(config.vocab, OPTION_COUNT, seenRef.current);
+    seenRef.current = updateSeenWords(
+      seenRef.current,
+      q.item.id,
+      config.vocab.length,
+      RECENT_MEMORY,
+    );
     setQuestion(q);
     setPicked(null);
     setStatus(null);

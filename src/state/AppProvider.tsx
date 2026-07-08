@@ -247,6 +247,19 @@ export function AppProvider({ children, initialLang = 'es' }: AppProviderProps) 
     (wordId: string) => dispatchProgress({ type: 'french-correct', wordId }),
     [dispatchProgress],
   );
+  const recordDictationItem = useCallback(
+    (dictationId: string, index: number) =>
+      dispatchProgress({
+        type: 'dictation-item',
+        itemKey: `${dictationId}:${index}`,
+      }),
+    [dispatchProgress],
+  );
+  const recordDictationCompleted = useCallback(
+    (dictationId: string) =>
+      dispatchProgress({ type: 'dictation-completed', dictationId }),
+    [dispatchProgress],
+  );
   const resetProgress = useCallback(() => {
     updateActiveProfile((p) => ({ ...p, progress: initialProgress }));
     setRewards([]);
@@ -384,6 +397,8 @@ export function AppProvider({ children, initialLang = 'es' }: AppProviderProps) 
       recordStoryCompleted,
       recordEnglishCorrect,
       recordFrenchCorrect,
+      recordDictationItem,
+      recordDictationCompleted,
       resetProgress,
       rewards,
       dismissReward,
@@ -420,6 +435,8 @@ export function AppProvider({ children, initialLang = 'es' }: AppProviderProps) 
     recordStoryCompleted,
     recordEnglishCorrect,
     recordFrenchCorrect,
+    recordDictationItem,
+    recordDictationCompleted,
     resetProgress,
     rewards,
     dismissReward,

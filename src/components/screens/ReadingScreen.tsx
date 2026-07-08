@@ -327,14 +327,23 @@ export function ReadingScreen() {
     }
     setResult(null);
     setManualDone(false);
-    recorder.start();
-    if (recognition.supported) {
-      recognition.start((transcript) => {
-        const r = checkReading(sentence, transcript);
-        setResult(r);
-        if (r.status === 'great') award();
-      });
-    }
+
+    void (async () => {
+      // Primero el permiso del micrófono (grabadora); el
+      // reconocimiento arranca DESPUÉS de concedido. Si arrancaran a
+      // la vez, el diálogo de permiso mataba el reconocimiento y al
+      // terminar "no pasaba nada" (bug reportado).
+      if (recorder.supported) {
+        await recorder.start();
+      }
+      if (recognition.supported) {
+        recognition.start((transcript) => {
+          const r = checkReading(sentence, transcript);
+          setResult(r);
+          if (r.status === 'great') award();
+        });
+      }
+    })();
   };
 
   const playRecording = () => {

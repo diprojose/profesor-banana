@@ -45,6 +45,8 @@ export function sanitizeProgress(raw: Partial<Progress> | undefined): Progress {
     frenchWordIds: raw?.frenchWordIds ?? [],
     readPages: raw?.readPages ?? [],
     completedStories: raw?.completedStories ?? [],
+    dictationItems: raw?.dictationItems ?? [],
+    completedDictations: raw?.completedDictations ?? [],
   };
 }
 

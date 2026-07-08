@@ -39,18 +39,37 @@ export function useSpeech(lang: SpeechLang, options: SpeechOptions = {}) {
     setSpeaking(false);
   }, [supported]);
 
+  // Precalienta la lista de voces (en Chrome se carga async; si se
+  // pide una voz antes de que exista, el speak puede salir mudo).
+  useEffect(() => {
+    if (!supported) return;
+    window.speechSynthesis.getVoices();
+  }, [supported]);
+
   const speak = useCallback(
     (text: string) => {
       if (!supported || !enabled) return;
-      window.speechSynthesis.cancel();
+      const synth = window.speechSynthesis;
+      synth.cancel();
+      // Chrome a veces queda en estado "paused" y traga los speak().
+      synth.resume();
+
+      const locale = speechLocale[lang];
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = speechLocale[lang];
+      utterance.lang = locale;
+      // Si hay una voz instalada para el idioma, usarla explícitamente
+      // (con solo `lang`, algunos sistemas no encuentran voz y callan).
+      const voices = synth.getVoices();
+      const voice =
+        voices.find((v) => v.lang === locale) ??
+        voices.find((v) => v.lang.startsWith(locale.slice(0, 2)));
+      if (voice) utterance.voice = voice;
       utterance.rate = rate;
       utterance.pitch = pitch;
       utterance.onend = () => setSpeaking(false);
       utterance.onerror = () => setSpeaking(false);
       setSpeaking(true);
-      window.speechSynthesis.speak(utterance);
+      synth.speak(utterance);
     },
     [supported, enabled, lang, rate, pitch],
   );

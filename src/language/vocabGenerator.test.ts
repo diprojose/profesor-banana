@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import {
   generateVocabQuestion,
+  updateSeenWords,
   vocabModes,
   type Random,
 } from './vocabGenerator';
@@ -71,6 +72,23 @@ describe.each(islands)('generateVocabQuestion (%s)', (_name, vocab) => {
       recent.unshift(q.item.id);
       if (recent.length > 8) recent.pop();
     }
+  });
+
+  it('con el mazo, recorre TODO el vocabulario sin repetir ninguna', () => {
+    const rng = seededRandom(13);
+    let seen: string[] = [];
+    const cycle = new Set<string>();
+    for (let i = 0; i < vocab.length; i++) {
+      const q = generateVocabQuestion(vocab, 4, seen, rng);
+      expect(cycle.has(q.item.id)).toBe(false);
+      cycle.add(q.item.id);
+      seen = updateSeenWords(seen, q.item.id, vocab.length, 8);
+    }
+    expect(cycle.size).toBe(vocab.length);
+    // La vuelta siguiente tampoco repite las últimas 8 de la anterior.
+    const next = generateVocabQuestion(vocab, 4, seen, rng);
+    expect(seen).not.toContain(next.item.id);
+    expect(seen.length).toBeLessThanOrEqual(8);
   });
 });
 

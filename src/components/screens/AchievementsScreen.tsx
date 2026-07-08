@@ -18,6 +18,7 @@ export function AchievementsScreen() {
     { value: progress.completedStories.length, label: t.statsStories },
     { value: progress.englishWordIds.length, label: t.statsEnglish },
     { value: progress.frenchWordIds.length, label: t.statsFrench },
+    { value: progress.completedDictations.length, label: t.statsDictation },
     { value: progress.bestStreak, label: t.statsStreak },
     { value: progress.stars, label: t.statsStars },
   ];

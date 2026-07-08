@@ -48,7 +48,8 @@ export const strings = {
 
     // Lectura: grabar y corregir
     tapToRead: 'Toca el micrófono y lee la frase en voz alta',
-    listeningHint: 'Escuchando… lee sin prisa y toca el micrófono al terminar',
+    listeningHint:
+      'Te escucho… lee la frase sin prisa. Al terminar, espera un momentito ✨',
     imDone: '¡Listo!',
     playMyReading: 'Escucharme',
     heard: 'Escuché',
@@ -89,6 +90,36 @@ export const strings = {
     frenchSub: 'Aprende francés',
     frenchTitle: '¿Cómo se dice en francés?',
     statsFrench: 'Palabras en francés',
+
+    // Isla del Dictado
+    dictationIsland: 'Isla del Dictado',
+    dictationSub: 'Escucha y escribe',
+    dictations: 'Dictados',
+    chooseDictation: 'Elige un dictado',
+    dictationLevel1: 'Primeras palabras',
+    dictationLevel2: 'Frases cortas',
+    dictationLevel3: 'Dictado experto',
+    dictationParts: 'partes',
+    part: 'Parte',
+    dictationHint: 'Toca "Escuchar" y escribe lo que oigas',
+    listenAgain: 'Escuchar otra vez',
+    typeHere: 'Escribe aquí lo que escuchaste…',
+    check: 'Comprobar',
+    itemCorrect: '¡Muy bien escrito!',
+    itemAccent: '¡Muy bien! Recuerda la tilde:',
+    itemAlmost: '¡Casi! Así se escribe:',
+    tryAgainWriting: 'Corregir',
+    seeResults: 'Ver resultados',
+    dictationResultsTitle: 'Tu dictado',
+    yourAnswer: 'Lo que escribiste',
+    correctText: 'Cómo se escribe',
+    emptyAnswer: '(vacío)',
+    dictationScore: 'palabras bien',
+    dictationPerfect: '¡Dictado perfecto!',
+    dictationKeepGoing: '¡Muy bien! Sigue practicando ✨',
+    anotherDictation: 'Otro dictado',
+    repeatDictation: 'Repetir este',
+    statsDictation: 'Dictados hechos',
 
     // Ajustes
     settings: 'Ajustes',
@@ -237,7 +268,8 @@ export const strings = {
 
     // Reading: record and check
     tapToRead: 'Tap the microphone and read the sentence aloud',
-    listeningHint: 'Listening… read at your own pace and tap the mic when you finish',
+    listeningHint:
+      "I'm listening… read the sentence at your own pace. When you finish, wait a moment ✨",
     imDone: 'Done!',
     playMyReading: 'Hear myself',
     heard: 'I heard',
@@ -278,6 +310,36 @@ export const strings = {
     frenchSub: 'Learn French',
     frenchTitle: 'What is it in French?',
     statsFrench: 'French words',
+
+    // Dictation Island
+    dictationIsland: 'Dictation Island',
+    dictationSub: 'Listen & write',
+    dictations: 'Dictations',
+    chooseDictation: 'Choose a dictation',
+    dictationLevel1: 'First words',
+    dictationLevel2: 'Short sentences',
+    dictationLevel3: 'Expert dictation',
+    dictationParts: 'parts',
+    part: 'Part',
+    dictationHint: 'Tap "Listen" and type what you hear',
+    listenAgain: 'Listen again',
+    typeHere: 'Type what you heard here…',
+    check: 'Check',
+    itemCorrect: 'Well written!',
+    itemAccent: 'Well done! Remember the accent:',
+    itemAlmost: "Almost! Here's how:",
+    tryAgainWriting: 'Fix it',
+    seeResults: 'See results',
+    dictationResultsTitle: 'Your dictation',
+    yourAnswer: 'What you wrote',
+    correctText: 'The correct way',
+    emptyAnswer: '(empty)',
+    dictationScore: 'words right',
+    dictationPerfect: 'Perfect dictation!',
+    dictationKeepGoing: 'Great job! Keep practicing ✨',
+    anotherDictation: 'Another dictation',
+    repeatDictation: 'Repeat this one',
+    statsDictation: 'Dictations done',
 
     // Settings
     settings: 'Settings',

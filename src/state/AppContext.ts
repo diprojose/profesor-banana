@@ -14,6 +14,7 @@ export type Screen =
   | 'reading'
   | 'english'
   | 'french'
+  | 'dictation'
   | 'settings'
   | 'achievements'
   | 'profiles'
@@ -118,6 +119,10 @@ export interface AppContextValue {
   recordEnglishCorrect: (wordId: string) => void;
   /** Palabra de francés acertada (+1 estrella, cuenta palabras distintas). */
   recordFrenchCorrect: (wordId: string) => void;
+  /** Parte de dictado escrita sin errores (+1 estrella la primera vez). */
+  recordDictationItem: (dictationId: string, index: number) => void;
+  /** Dictado terminado: todas sus partes escritas (+2 estrellas). */
+  recordDictationCompleted: (dictationId: string) => void;
   resetProgress: () => void;
 
   // Recompensas por celebrar (cola)

@@ -266,6 +266,10 @@
   background: #4a69bd;
 }
 
+.playBadgeDictation {
+  background: #d68a3c;
+}
+
 /* Móvil vertical: la misma cuadrícula, en una sola columna. */
 @media (max-width: 719px) {
   .map {

@@ -135,6 +135,24 @@ export const medals: MedalDef[] = [
     },
   },
   {
+    id: 'dictation-1',
+    emoji: '✍️',
+    isUnlocked: (p) => p.completedDictations.length >= 1,
+    text: {
+      es: { name: 'Primer dictado', desc: 'Termina tu primer dictado' },
+      en: { name: 'First dictation', desc: 'Finish your first dictation' },
+    },
+  },
+  {
+    id: 'dictation-15',
+    emoji: '📝',
+    isUnlocked: (p) => p.dictationItems.length >= 15,
+    text: {
+      es: { name: 'Buena letra', desc: 'Escribe 15 frases sin errores' },
+      en: { name: 'Good speller', desc: 'Write 15 lines with no mistakes' },
+    },
+  },
+  {
     id: 'stars-25',
     emoji: '⭐',
     isUnlocked: (p) => p.stars >= 25,

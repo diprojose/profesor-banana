@@ -15,7 +15,13 @@ export interface UseVoiceRecorder {
   /** URL del audio grabado (object URL) o null. */
   audioUrl: string | null;
   error: RecorderError;
-  start: () => void;
+  /**
+   * Pide el micrófono y empieza a grabar. Resuelve `true` cuando la
+   * grabación YA está en marcha (permiso concedido): quien espere
+   * esta promesa puede arrancar el reconocimiento de voz sin que el
+   * diálogo de permiso lo mate a mitad de camino.
+   */
+  start: () => Promise<boolean>;
   stop: () => void;
   clear: () => void;
 }
@@ -53,46 +59,46 @@ export function useVoiceRecorder(): UseVoiceRecorder {
     setAudioUrl(null);
   }, [revokeUrl]);
 
-  const start = useCallback(() => {
-    if (!supported) return;
+  const start = useCallback(async (): Promise<boolean> => {
+    if (!supported) return false;
     setError(null);
     revokeUrl();
     setAudioUrl(null);
 
-    navigator.mediaDevices
-      .getUserMedia({ audio: true })
-      .then((stream) => {
-        streamRef.current = stream;
-        const recorder = new MediaRecorder(stream);
-        chunksRef.current = [];
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
+      const recorder = new MediaRecorder(stream);
+      chunksRef.current = [];
 
-        recorder.ondataavailable = (e) => {
-          if (e.data.size > 0) chunksRef.current.push(e.data);
-        };
-        recorder.onstop = () => {
-          const blob = new Blob(chunksRef.current, {
-            type: recorder.mimeType || 'audio/webm',
-          });
-          const url = URL.createObjectURL(blob);
-          urlRef.current = url;
-          setAudioUrl(url);
-          stopStream();
-        };
-
-        recorder.start();
-        recorderRef.current = recorder;
-        setRecording(true);
-      })
-      .catch((err: unknown) => {
-        const name = (err as { name?: string } | null)?.name;
-        setError(
-          name === 'NotAllowedError' || name === 'SecurityError'
-            ? 'denied'
-            : 'failed',
-        );
-        setRecording(false);
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
+      recorder.onstop = () => {
+        const blob = new Blob(chunksRef.current, {
+          type: recorder.mimeType || 'audio/webm',
+        });
+        const url = URL.createObjectURL(blob);
+        urlRef.current = url;
+        setAudioUrl(url);
         stopStream();
-      });
+      };
+
+      recorder.start();
+      recorderRef.current = recorder;
+      setRecording(true);
+      return true;
+    } catch (err: unknown) {
+      const name = (err as { name?: string } | null)?.name;
+      setError(
+        name === 'NotAllowedError' || name === 'SecurityError'
+          ? 'denied'
+          : 'failed',
+      );
+      setRecording(false);
+      stopStream();
+      return false;
+    }
   }, [supported, revokeUrl, stopStream]);
 
   const stop = useCallback(() => {

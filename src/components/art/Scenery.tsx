@@ -190,6 +190,54 @@ export function FrenchIslandArt() {
   );
 }
 
+/** Isla del Dictado (botón del mapa): cuaderno con lápiz y globo "A a". */
+export function DictationIslandArt() {
+  return (
+    <svg style={islandSvgStyle} viewBox="0 0 240 168">
+      <ellipse cx="120" cy="150" rx="112" ry="16" fill="#fff" opacity="0.35" />
+      <ellipse cx="120" cy="130" rx="98" ry="24" fill="#F3DCA6" />
+      <path
+        d="M26 124 Q 120 90 214 124 Q 180 110 120 108 Q 60 110 26 124 Z"
+        fill="var(--mint)"
+      />
+      {/* Cuaderno con renglones */}
+      <g transform="translate(58 44) rotate(-8)">
+        <rect x="0" y="0" width="70" height="62" rx="7" fill="#fff" stroke="var(--accent)" strokeWidth="4" />
+        <line x1="12" y1="18" x2="58" y2="18" stroke="#BFE0F5" strokeWidth="4" strokeLinecap="round" />
+        <line x1="12" y1="31" x2="58" y2="31" stroke="#BFE0F5" strokeWidth="4" strokeLinecap="round" />
+        <line x1="12" y1="44" x2="44" y2="44" stroke="#BFE0F5" strokeWidth="4" strokeLinecap="round" />
+      </g>
+      {/* Lápiz escribiendo */}
+      <g transform="translate(118 78) rotate(46)">
+        <rect x="-5" y="-34" width="10" height="30" rx="2" fill="var(--yellow)" />
+        <rect x="-5" y="-40" width="10" height="7" fill="#F0A24B" />
+        <path d="M-5 -4 L5 -4 L0 6 Z" fill="#F3DCA6" />
+        <path d="M-2 -1 L2 -1 L0 4 Z" fill="#5A4632" />
+      </g>
+      {/* Globo "A a" */}
+      <g transform="translate(150 30)">
+        <path
+          d="M2 6 Q2 0 8 0 H46 Q52 0 52 6 V26 Q52 32 46 32 H22 L12 42 L14 32 H8 Q2 32 2 26 Z"
+          fill="#fff"
+          stroke="var(--coral)"
+          strokeWidth="3"
+        />
+        <text
+          x="27"
+          y="23"
+          textAnchor="middle"
+          fontFamily="var(--head)"
+          fontSize="18"
+          fontWeight="800"
+          fill="var(--coralInk)"
+        >
+          A a
+        </text>
+      </g>
+    </svg>
+  );
+}
+
 /** Ilustración del cuento (Isla de las Palabras / lectura). */
 export function StorybookScene() {
   return (

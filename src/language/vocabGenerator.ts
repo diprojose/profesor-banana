@@ -105,3 +105,26 @@ export function generateVocabQuestion(
 
   return { mode: chosenMode, item, options };
 }
+
+/**
+ * Lleva el "mazo" de palabras vistas: ninguna palabra se repite hasta
+ * haber recorrido TODO el vocabulario. Cuando se completa la vuelta,
+ * el mazo se reinicia conservando las `keep` más recientes para que
+ * tampoco haya repeticiones justo en el cambio de vuelta.
+ *
+ * Uso: pasar `seen` como `recentIds` al generador y actualizarlo con
+ * esta función tras cada pregunta.
+ */
+export function updateSeenWords(
+  seen: readonly string[],
+  newId: string,
+  vocabSize: number,
+  keep = 8,
+): string[] {
+  const next = [newId, ...seen.filter((id) => id !== newId)];
+  if (next.length >= vocabSize) {
+    // Vuelta completa: empezar de nuevo sin repetir las últimas.
+    return next.slice(0, Math.min(keep, Math.max(0, vocabSize - 1)));
+  }
+  return next;
+}

@@ -25,6 +25,12 @@ export interface Progress {
   frenchLearned: number;
   /** Ids de palabras de francés distintas ya acertadas alguna vez. */
   frenchWordIds: string[];
+  /** Partes de dictado escritas sin errores (total, incluye repetidas). */
+  dictationsWritten: number;
+  /** Claves `dictadoId:parte` escritas perfectas alguna vez (premiadas). */
+  dictationItems: string[];
+  /** Ids de dictados terminados (todas sus partes escritas). */
+  completedDictations: string[];
   /** Racha actual de aciertos seguidos en matemáticas. */
   currentStreak: number;
   /** Mejor racha alcanzada. */
@@ -43,6 +49,9 @@ export const initialProgress: Progress = {
   englishWordIds: [],
   frenchLearned: 0,
   frenchWordIds: [],
+  dictationsWritten: 0,
+  dictationItems: [],
+  completedDictations: [],
   currentStreak: 0,
   bestStreak: 0,
   unlockedMedals: [],
@@ -56,6 +65,8 @@ export type ProgressEvent =
   | { type: 'story-completed'; storyId: string }
   | { type: 'english-correct'; wordId: string }
   | { type: 'french-correct'; wordId: string }
+  | { type: 'dictation-item'; itemKey: string }
+  | { type: 'dictation-completed'; dictationId: string }
   | { type: 'reset' };
 
 /** Aplica un evento y recalcula las medallas desbloqueadas. */
@@ -122,6 +133,27 @@ export function progressReducer(
         frenchWordIds: state.frenchWordIds.includes(event.wordId)
           ? state.frenchWordIds
           : [...state.frenchWordIds, event.wordId],
+      };
+      break;
+    }
+    case 'dictation-item': {
+      // Escribir bien una parte por primera vez da 1 ⭐.
+      if (state.dictationItems.includes(event.itemKey)) return state;
+      next = {
+        ...state,
+        stars: state.stars + 1,
+        dictationsWritten: state.dictationsWritten + 1,
+        dictationItems: [...state.dictationItems, event.itemKey],
+      };
+      break;
+    }
+    case 'dictation-completed': {
+      // Terminar un dictado (todas sus partes) da un bonus de 2 ⭐.
+      if (state.completedDictations.includes(event.dictationId)) return state;
+      next = {
+        ...state,
+        stars: state.stars + 2,
+        completedDictations: [...state.completedDictations, event.dictationId],
       };
       break;
     }

@@ -9,6 +9,7 @@ import {
   WordIslandArt,
   EnglishIslandArt,
   FrenchIslandArt,
+  DictationIslandArt,
 } from '../art/Scenery';
 import { PlayIcon, GearIcon } from '../icons/Icons';
 import { type ReactNode } from 'react';
@@ -67,6 +68,14 @@ export function HomeScreen() {
       sub: t.wordSub,
       badgeClass: styles.playBadgeWord,
       floatDelayed: true,
+    },
+    {
+      id: 'dictation',
+      screen: 'dictation',
+      art: <DictationIslandArt />,
+      title: t.dictationIsland,
+      sub: t.dictationSub,
+      badgeClass: styles.playBadgeDictation,
     },
   ];
 

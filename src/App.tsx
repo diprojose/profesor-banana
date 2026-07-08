@@ -4,6 +4,7 @@ import { HomeScreen } from './components/screens/HomeScreen';
 import { MathScreen } from './components/screens/MathScreen';
 import { ReadingScreen } from './components/screens/ReadingScreen';
 import { LanguageScreen } from './components/screens/LanguageScreen';
+import { DictationScreen } from './components/screens/DictationScreen';
 import { SettingsScreen } from './components/screens/SettingsScreen';
 import { AchievementsScreen } from './components/screens/AchievementsScreen';
 import { AuthScreen } from './components/screens/AuthScreen';
@@ -42,6 +43,8 @@ function CurrentScreen() {
       return <LanguageScreen island="english" />;
     case 'french':
       return <LanguageScreen island="french" />;
+    case 'dictation':
+      return <DictationScreen />;
     case 'settings':
       return <SettingsScreen />;
     case 'achievements':
